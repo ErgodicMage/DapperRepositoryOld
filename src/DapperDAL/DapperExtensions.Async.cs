@@ -181,7 +181,7 @@ public static partial class DapperExtensions
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
         var dynParameters = UpdateBuilder<T>.GetUpdateParameters(parameters);
-        return await connection.ExecuteAsync(sql, parameters, transaction, commandTimeout);
+        return await connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 
     public static Task<int> UpdateAsync<T>(this IDbConnection connection, T entity, object updates, IDbTransaction transaction = null,
