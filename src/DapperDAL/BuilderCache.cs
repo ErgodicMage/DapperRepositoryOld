@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace DapperDAL;
+﻿namespace DapperDAL;
 
 /// <summary>
 /// Caches often used property information needed to build sql statements. 
@@ -28,18 +26,8 @@ public class BuilderCache<T> where T : class
     #region Cache Operations
     private static string KeyName(string key) => $"{typeof(T).Name}.{key}";
 
-    private static T GetorSet<T>(string key, Func<T> create) =>
-        DefaultCache.GetorSet<T>(KeyName(key), create);
+    private static TValue GetorSet<TValue>(string key, Func<TValue> create) =>
+        DefaultCache.GetorSet<TValue>(KeyName(key), create);
 
-    //private static T GetorSet<T>(string key, Func<T> create)
-    //{
-    //    T retObj;
-    //    string name = KeyName(key);
-
-    //    if (!DefaultCache.Cache.TryGetValue(name, out retObj))
-    //        retObj = DefaultCache.Cache.Set(name, create());
-
-    //    return retObj;
-    //}
     #endregion
 }

@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace DapperDAL;
+﻿namespace DapperDAL;
 
 /// <summary>
 /// Builds where statements for generating sql.

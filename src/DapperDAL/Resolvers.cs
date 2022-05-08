@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace DapperDAL;
+﻿namespace DapperDAL;
 
 public static class Resolvers
 {

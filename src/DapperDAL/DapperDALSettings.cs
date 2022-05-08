@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DapperDAL;
 
@@ -12,19 +13,24 @@ namespace DapperDAL;
 public static class DapperDALSettings
 {
     // This could be made as a ConcurrentDictionary, but since loading is only intended once it should not need concurrency
-    public static IDictionary<string, string> ConnectionStrings { get; } = new Dictionary<string, string>();
+    public static string ConnectionStrings(string connectionName) =>
+        DefaultCache.Cache.Get(ConnectionKey(connectionName)) as string;
+
+
+    public static string ConnectionKey(string key) => $"ConnectionString.{key}";
 
     /// <summary>
     /// Load connection string from a IConfiguration.
     /// </summary>
     /// <param name="config"></param>
-    public static void Load(IConfiguration config)
+    public static void Initialize(IConfiguration config)
     {
+        DefaultCache.Cache = new MemoryCache(new MemoryCacheOptions() { SizeLimit = 1024 });
+
         var section = config.GetSection("ConnectionStrings").GetChildren();
         foreach (IConfigurationSection c in section)
         {
-            if (!ConnectionStrings.ContainsKey(c.Key))
-                ConnectionStrings.Add(c.Key, c.Value);
+            DefaultCache.GetorSet(ConnectionKey(c.Key), c.Value);
         }
     }
 

@@ -5,17 +5,29 @@ namespace DapperDAL;
 // This needs more work to prevent race conditions
 public static class DefaultCache
 {
-    private static MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
-    public static MemoryCache Cache { get => _cache; }
+    private static IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+    public static IMemoryCache Cache { get => _cache; internal set { _cache = value; } }
 
     public static T GetorSet<T>(string key, Func<T> create)
     {
         T retObj;
 
-        if (!DefaultCache.Cache.TryGetValue(key, out retObj))
+        if (_cache.TryGetValue(key, out retObj))
             return retObj;
 
-        retObj = DefaultCache.Cache.Set(key, create());
+        retObj = _cache.Set(key, create());
+
+        return retObj;
+    }
+
+    public static string GetorSet(string key, string obj)
+    {
+        string retObj;
+
+        if (_cache.TryGetValue(key, out retObj))
+            return retObj;
+
+        retObj = _cache.Set(key, obj);
 
         return retObj;
     }
