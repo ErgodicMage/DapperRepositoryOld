@@ -3,9 +3,9 @@
 namespace DapperDAL;
 
 // This needs more work to prevent race conditions
-public static class DefaultCache
+public static class DapperDALCache
 {
-    private static IMemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+    private static IMemoryCache _cache;
     public static IMemoryCache Cache { get => _cache; internal set { _cache = value; } }
 
     public static T GetorSet<T>(string key, Func<T> create)

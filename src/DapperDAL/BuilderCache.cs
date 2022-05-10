@@ -27,7 +27,7 @@ public class BuilderCache<T> where T : class
     private static string KeyName(string key) => $"{typeof(T).Name}.{key}";
 
     private static TValue GetorSet<TValue>(string key, Func<TValue> create) =>
-        DefaultCache.GetorSet<TValue>(KeyName(key), create);
+        DapperDALCache.GetorSet<TValue>(KeyName(key), create);
 
     #endregion
 }

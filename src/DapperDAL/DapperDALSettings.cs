@@ -12,9 +12,8 @@ namespace DapperDAL;
 /// </summary>
 public static class DapperDALSettings
 {
-    // This could be made as a ConcurrentDictionary, but since loading is only intended once it should not need concurrency
     public static string ConnectionStrings(string connectionName) =>
-        DefaultCache.Cache.Get(ConnectionKey(connectionName)) as string;
+        DapperDALCache.Cache.Get(ConnectionKey(connectionName)) as string;
 
 
     public static string ConnectionKey(string key) => $"ConnectionString.{key}";
@@ -25,12 +24,26 @@ public static class DapperDALSettings
     /// <param name="config"></param>
     public static void Initialize(IConfiguration config)
     {
-        DefaultCache.Cache = new MemoryCache(new MemoryCacheOptions() { SizeLimit = 1024 });
+        DapperDALCache.Cache ??= new MemoryCache(new MemoryCacheOptions());
 
         var section = config.GetSection("ConnectionStrings").GetChildren();
         foreach (IConfigurationSection c in section)
         {
-            DefaultCache.GetorSet(ConnectionKey(c.Key), c.Value);
+            //DapperDALCache.GetorSet(ConnectionKey(c.Key), c.Value);
+            DapperDALCache.Cache.Set(ConnectionKey(c.Key), c.Value, 
+                new MemoryCacheEntryOptions() { Priority = CacheItemPriority.NeverRemove});
+        }
+    }
+
+    public static void Initialize(IDictionary<string, string> connectionStrings)
+    {
+        DapperDALCache.Cache ??= new MemoryCache(new MemoryCacheOptions());
+
+        foreach (var c in connectionStrings)
+        {
+            //DapperDALCache.GetorSet(ConnectionKey(c.Key), c.Value);
+            DapperDALCache.Cache.Set(ConnectionKey(c.Key), c.Value, 
+                new MemoryCacheEntryOptions() { Priority = CacheItemPriority.NeverRemove});
         }
     }
 
@@ -40,7 +53,7 @@ public static class DapperDALSettings
     //public static void Load()
     //{
     //    var settings = System.Configuration.ConfigurationManager.ConnectionStrings;
-        
+
     //    foreach (System.Configuration.ConnectionStringSettings setting in settings)
     //    {
     //        if (!ConnectionStrings.ContainsKey(setting.Name))
