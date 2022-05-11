@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{B17530AC-D114-4D05-A174-D6376312D4E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionDAL", "Examples\CompositionDAL\CompositionDAL.csproj", "{40BD5756-C507-4074-B922-3EB81CBAF0FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,12 +26,17 @@ Global
 		{35683A8E-1B4F-42CF-9426-D052EAD944DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35683A8E-1B4F-42CF-9426-D052EAD944DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35683A8E-1B4F-42CF-9426-D052EAD944DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40BD5756-C507-4074-B922-3EB81CBAF0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40BD5756-C507-4074-B922-3EB81CBAF0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40BD5756-C507-4074-B922-3EB81CBAF0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40BD5756-C507-4074-B922-3EB81CBAF0FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{35683A8E-1B4F-42CF-9426-D052EAD944DD} = {BB133A03-A2A4-42C5-A25E-3A77DB20DA00}
+		{40BD5756-C507-4074-B922-3EB81CBAF0FD} = {B17530AC-D114-4D05-A174-D6376312D4E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EEF68715-8AE2-4FF8-832C-F101B80499EB}
