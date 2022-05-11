@@ -28,11 +28,8 @@ public static class DapperDALSettings
 
         var section = config.GetSection("ConnectionStrings").GetChildren();
         foreach (IConfigurationSection c in section)
-        {
-            //DapperDALCache.GetorSet(ConnectionKey(c.Key), c.Value);
             DapperDALCache.Cache.Set(ConnectionKey(c.Key), c.Value, 
                 new MemoryCacheEntryOptions() { Priority = CacheItemPriority.NeverRemove});
-        }
     }
 
     public static void Initialize(IDictionary<string, string> connectionStrings)
@@ -40,12 +37,14 @@ public static class DapperDALSettings
         DapperDALCache.Cache ??= new MemoryCache(new MemoryCacheOptions());
 
         foreach (var c in connectionStrings)
-        {
-            //DapperDALCache.GetorSet(ConnectionKey(c.Key), c.Value);
             DapperDALCache.Cache.Set(ConnectionKey(c.Key), c.Value, 
                 new MemoryCacheEntryOptions() { Priority = CacheItemPriority.NeverRemove});
-        }
     }
+
+    public static void AddConnectionString(string name, string connectionString) =>
+        DapperDALCache.Cache.Set(ConnectionKey(name), connectionString,
+            new MemoryCacheEntryOptions() { Priority = CacheItemPriority.NeverRemove });
+
 
     /// <summary>
     /// Load connection strings from older ConfigurationManager.ConnectionStrings
