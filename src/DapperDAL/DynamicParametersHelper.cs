@@ -107,12 +107,15 @@ public static class DynamicParametersHelper<T> where T : class
         return returnParameters;
     }
 
-    public static DynamicParameters DynamicParametersUpdate(object parameters)
+    public static DynamicParameters DynamicParametersUpdate(object parameters, DynamicParameters whereParameters = null)
     {
-        DynamicParameters returnParameters = new DynamicParameters();
+        DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
 
         foreach (var property in parameters.GetType().GetProperties())
         {
+            if (whereParameters != null && whereParameters.ParameterNames.Contains(property.Name))
+                continue;
+
             var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
 
             int stringLength = 0;

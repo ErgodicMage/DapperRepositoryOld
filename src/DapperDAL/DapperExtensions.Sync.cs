@@ -189,7 +189,7 @@ public static partial class DapperExtensions
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
         var dynParameters = UpdateBuilder<T>.GetUpdateParameters(parameters);
-        return connection.Execute(sql, parameters, transaction, commandTimeout);
+        return connection.Execute(sql, dynParameters, transaction, commandTimeout);
     }
 
     public static int UpdateLargeProperties<T>(this IDbConnection connection, object parameters, IDbTransaction transaction = null,
