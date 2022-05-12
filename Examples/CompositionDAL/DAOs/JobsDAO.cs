@@ -120,16 +120,82 @@ public class JobsDAO
         return await connection.UpdateAsync<Job>(new { JobId = jobId, Status = status });
     }
 
-    public int UpdateStatusOrderSystem(int jobId, string status, DateTime updateDate)
+    public int UpdateStatusCompleted(int jobId, string status, DateTime? completedDate = null)
     {
+        DateTime date = completedDate ?? DateTime.Now;
         using var connection = new SqlConnection(ConnectionString);
-        return connection.Update<Job>(new { JobId = jobId, JobStatus = status, UpdatedOrderSystem = updateDate });
+        return connection.Update<Job>(new { JobId = jobId, JobStatus = status, Completed = date });
     }
 
-    public async Task<int> UpdateStatusOrderSystemAsync(int jobId, string status, DateTime updateDate)
+    public async Task<int> UpdateStatusCompletedAsync(int jobId, string status, DateTime? completedDate = null)
+    {
+        DateTime date = completedDate ?? DateTime.Now;
+        using var connection = new SqlConnection(ConnectionString);
+        return await connection.UpdateAsync<Job>(new { JobId = jobId, JobStatus = status, Completed = date });
+    }
+
+    public int UpdateComplete(int jobId)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.UpdateAsync<Job>(new { JobId = jobId, JobStatus = status, UpdatedOrderSystem = updateDate });
+        return connection.Update<Job>(new { JobId = jobId, Status = Job.JobStatus.Complete, Completed = DateTime.Now});
+    }
+
+    public async Task<int> UpdateCompleteAsync(int jobId)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return await connection.UpdateAsync<Job>(new { JobId = jobId, Status = Job.JobStatus.Complete, Completed = DateTime.Now });
+    }
+
+    public int UpdateError(int jobId, string message)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return connection.Update<Job>(new { JobId = jobId, Status = Job.JobStatus.Error, Notes = message, Completed = DateTime.Now });
+    }
+
+    public async Task<int> UpdateErrorAsync(int jobId, string message)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return await connection.UpdateAsync<Job>(new { JobId = jobId, Status = Job.JobStatus.Error, Notes = message, Completed = DateTime.Now });
+    }
+
+    public int UpdateLastJobRun(int jobId, int lastJobRunId)
+    {
+        var connection = new SqlConnection(ConnectionString);
+        return connection.Update<Job>(new { JobId = jobId, LastJobRunId = lastJobRunId });
+    }
+
+    public async Task<int> UpdateLastJobRunAsync(int jobId, int lastJobRunId)
+    {
+        var connection = new SqlConnection(ConnectionString);
+        return await connection.UpdateAsync<Job>(new { JobId = jobId, LastJobRunId = lastJobRunId });
+    }
+
+    public int UpdatePageCount(int jobId, int pageCount)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return connection.Update<Job>(new { JobId = jobId, PageCount = pageCount });
+
+    }
+
+    public async Task<int> UpdatePageCountAsync(int jobId, int pageCount)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return await connection.UpdateAsync<Job>(new { JobId = jobId, PageCount = pageCount });
+
+    }
+    #endregion
+
+    #region Delete
+    public int Delete(int jobId)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return connection.DeleteId<Job>(jobId);
+    }
+
+    public async Task<int> DeleteAsync(int jobId)
+    {
+        using var connection = new SqlConnection(ConnectionString);
+        return await connection.DeleteIdAsync<Job>(jobId);
     }
     #endregion
 }
