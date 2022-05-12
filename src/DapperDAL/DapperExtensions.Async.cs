@@ -173,6 +173,13 @@ public static partial class DapperExtensions
         string sql = InsertBuilder<T>.BuildInsertStatement();
         return connection.ExecuteScalarAsync<int>(sql, entity, transaction, commandTimeout);
     }
+
+    public async static Task<int> InsertLargePropertiesAsync<T>(this IDbConnection connection, T entity, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = InsertBuilder<T>.BuildInsertStatement();
+        var dynParameters = DynamicParametersHelper<T>.DynamicParametersInsert(entity);
+        return await connection.ExecuteScalarAsync<int>(sql, dynParameters, transaction, commandTimeout);
+    }
     #endregion
 
     #region Update functions
@@ -181,6 +188,14 @@ public static partial class DapperExtensions
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
         var dynParameters = UpdateBuilder<T>.GetUpdateParameters(parameters);
+        return await connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+    }
+
+    public static async Task<int> UpdateLargePropertiesAsync<T>(this IDbConnection connection, object parameters,
+        IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
+        var dynParameters = DynamicParametersHelper<T>.DynamicParametersUpdate(parameters);
         return await connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 

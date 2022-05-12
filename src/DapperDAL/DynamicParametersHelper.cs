@@ -66,4 +66,71 @@ public static class DynamicParametersHelper<T> where T : class
 
         return returnParameters;
     }
+
+    public static DynamicParameters DynamicParametersInsert(T entity)
+    {
+        DynamicParameters returnParameters = new();
+
+        foreach (var property in typeof(T).GetProperties())
+        {
+            // if we have where parameters ignore Id types since they will already be included
+            if (property.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            var attributes = property.GetCustomAttributes(true);
+
+            // if we have where parameters ignore [Key] types since they will already be included
+            if (attributes.Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name))
+                continue;
+
+            // don't include [IgnoreInsert] or [NotMapped]
+            if (attributes.Any(attr =>
+                                attr.GetType().Name == typeof(IgnoreInsertAttribute).Name ||
+                                attr.GetType().Name == typeof(NotMappedAttribute).Name))
+                continue;
+
+            int stringLength = 0;
+
+            dynamic columnAttribute = attributes.FirstOrDefault(attr => attr.GetType().Name == typeof(ColumnAttribute).Name);
+            if (columnAttribute != null)
+                stringLength = columnAttribute.Length;
+
+            string name = $"@{property.Name}";
+            object v = property.GetValue(entity, null);
+
+            if (stringLength == 0)
+                returnParameters.Add(name, v);
+            else
+                returnParameters.Add(name, v, null, ParameterDirection.Input, stringLength);
+        }
+
+        return returnParameters;
+    }
+
+    public static DynamicParameters DynamicParametersUpdate(object parameters)
+    {
+        DynamicParameters returnParameters = new DynamicParameters();
+
+        foreach (var property in parameters.GetType().GetProperties())
+        {
+            var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
+
+            int stringLength = 0;
+
+            var attributes = useProperty.GetCustomAttributes(true);
+            dynamic columnAttribute = attributes.FirstOrDefault(attr => attr.GetType().Name == typeof(ColumnAttribute).Name);
+            if (columnAttribute != null)
+                stringLength = columnAttribute.Length;
+
+            string name = $"@{property.Name}";
+            object v = property.GetValue(parameters, null);
+
+            if (stringLength == 0)
+                returnParameters.Add(name, v);
+            else
+                returnParameters.Add(name, v, null, ParameterDirection.Input, stringLength);
+        }
+
+        return returnParameters;
+    }
 }
