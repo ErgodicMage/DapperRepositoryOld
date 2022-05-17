@@ -30,6 +30,20 @@ public static class UpdateBuilder<T> where T : class
         return sb.ToString();
     }
 
+    public static string BuildUpdateStatement(object where, object updates)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("UPDATE ");
+        sb.Append(BuilderCache<T>.TableName);
+
+        sb.Append(" SET ");
+        BuildUpdateSetStatement(sb, updates);
+
+        sb = sb.Append(" WHERE ");
+        WhereBuilder<T>.BuildWhereString(sb, where);
+        return sb.ToString();
+    }
+
     public static void BuildUpdateSetStatement(StringBuilder sb, object updates)
     {
         bool first = true;

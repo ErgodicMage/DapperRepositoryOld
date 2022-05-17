@@ -31,13 +31,13 @@ public class VariableDataDAO
     public int Insert(VariableData varData)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.InsertLargeProperties<VariableData>(varData);
+        return connection.Insert<VariableData>(varData);
     }
 
     public async Task<int> InsertAsync(VariableData varData)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.InsertLargePropertiesAsync<VariableData>(varData);
+        return await connection.InsertAsync<VariableData>(varData);
     }
     #endregion
 
@@ -45,13 +45,13 @@ public class VariableDataDAO
     public int UpdateBillofMaterial(int jobId, string billofMaterial)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.UpdateLargeProperties<VariableData>(new { JobId = jobId, BillofMaterial = billofMaterial });
+        return connection.Update<VariableData>(new { JobId = jobId }, new { BillofMaterial = billofMaterial });
     }
 
     public async Task<int> UpdateBillofMaterialAsync(int jobId, string billofMaterial)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.UpdateLargePropertiesAsync<VariableData>(new { JobId = jobId, BillofMaterial = billofMaterial });
+        return await connection.UpdateAsync<VariableData>(new { JobId = jobId }, new { BillofMaterial = billofMaterial });
     }
     #endregion
 

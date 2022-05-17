@@ -1,11 +1,11 @@
 ﻿namespace CompositionDAL.DAOs;
 
-public class CompositionDAO
+public class CompositionJobDAO
 {
     #region Constructor
     private readonly string _connectionStringName;
 
-    public CompositionDAO(string connectionStringName)
+    public CompositionJobDAO(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
     }
@@ -31,13 +31,13 @@ public class CompositionDAO
     public int Insert(CompositionJob compJob)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.InsertLargeProperties<CompositionJob>(compJob);
+        return connection.Insert<CompositionJob>(compJob);
     }
 
     public async Task<int> InsertAsync(CompositionJob compJob)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.InsertLargePropertiesAsync<CompositionJob>(compJob);
+        return await connection.InsertAsync<CompositionJob>(compJob);
     }
     #endregion
 
