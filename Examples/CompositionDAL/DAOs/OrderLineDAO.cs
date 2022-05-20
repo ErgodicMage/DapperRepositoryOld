@@ -10,7 +10,7 @@ public class OrderLineDAO
         _connectionStringName = connectionStringName;
     }
 
-    private string ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
+    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
     #endregion
 
     #region Get

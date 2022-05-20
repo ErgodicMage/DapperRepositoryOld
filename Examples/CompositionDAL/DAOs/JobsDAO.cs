@@ -10,7 +10,7 @@ public class JobsDAO
         _connectionStringName = connectionStringName;
     }
 
-    private string ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
+    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
     #endregion
 
     #region Get
@@ -76,13 +76,13 @@ public class JobsDAO
         return await connection.GetListAsync<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
     }
 
-    public IEnumerable<Job> GetWhere(string whereCondition, object parameters = null, object orderBy = null)
+    public IEnumerable<Job> GetWhere(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
         return connection.GetList<Job>(whereCondition, parameters, orderBy);
     }
 
-    public async Task<IEnumerable<Job>> GetWhereAsync(string whereCondition, object parameters = null, object orderBy = null)
+    public async Task<IEnumerable<Job>> GetWhereAsync(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
         return await connection.GetListAsync<Job>(whereCondition, parameters, orderBy);
