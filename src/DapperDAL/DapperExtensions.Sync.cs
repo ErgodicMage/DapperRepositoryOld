@@ -174,6 +174,12 @@ public static partial class DapperExtensions
         string sql = InsertBuilder<T>.BuildInsertStatement();
         return connection.ExecuteScalar<int>(sql, entity, transaction, commandTimeout);
     }
+
+    public static string InsertReturnString<T>(this IDbConnection connection, T entity, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = InsertBuilder<T>.BuildInsertStatement();
+        return connection.ExecuteScalar<string>(sql, entity, transaction, commandTimeout);
+    }
     #endregion
 
     #region Update functions

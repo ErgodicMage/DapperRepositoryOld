@@ -173,24 +173,30 @@ public static partial class DapperExtensions
         string sql = InsertBuilder<T>.BuildInsertStatement();
         return connection.ExecuteScalarAsync<int>(sql, entity, transaction, commandTimeout);
     }
+
+    public static Task<string> InsertReturnStringAsync<T>(this IDbConnection connection, T entity, IDbTransaction transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = InsertBuilder<T>.BuildInsertStatement();
+        return connection.ExecuteScalarAsync<string>(sql, entity, transaction, commandTimeout);
+    }
     #endregion
 
     #region Update functions
-    public static async Task<int> UpdateAsync<T>(this IDbConnection connection, object parameters, IDbTransaction transaction = null,
+    public static Task<int> UpdateAsync<T>(this IDbConnection connection, object parameters, IDbTransaction transaction = null,
         int? commandTimeout = null) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
         var dynParameters = UpdateBuilder<T>.GetUpdateParameters(parameters);
-        return await connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 
-    public static async Task<int> UpdateAsync<T>(this IDbConnection connection, object where, object set, IDbTransaction transaction = null,
+    public static Task<int> UpdateAsync<T>(this IDbConnection connection, object where, object set, IDbTransaction transaction = null,
         int? commandTimeout = null) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateStatement(where, set);
         var whereParameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(where);
         var dynParameters = DynamicParametersHelper<T>.DynamicParametersUpdate(set, whereParameters);
-        return await connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 
     public static Task<int> UpdateAsync<T>(this IDbConnection connection, T entity, object updates, IDbTransaction transaction = null,
