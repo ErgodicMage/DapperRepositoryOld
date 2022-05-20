@@ -4,7 +4,7 @@ public class BooleanYNHandler : SqlMapper.TypeHandler<bool>
 {
     public override bool Parse(object value)
     {
-        if (value == null)
+        if (value is null)
             return false;
 
         bool ret = value switch

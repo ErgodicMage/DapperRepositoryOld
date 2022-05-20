@@ -21,7 +21,7 @@ public static class WhereBuilder<T> where T : class
                 if (sourceProperty.Name == useProperty.Name)
                 {
                     if (whereConditions != null && useProperty.CanRead && 
-                        (useProperty.GetValue(whereConditions, null) == null || 
+                        (useProperty.GetValue(whereConditions, null) is null || 
                         useProperty.GetValue(whereConditions, null) == DBNull.Value))
                     {
                         useIsNull = true;

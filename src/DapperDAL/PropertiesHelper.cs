@@ -4,7 +4,7 @@ public static class PropertiesHelper
 {
     public static IEnumerable<PropertyInfo> GetAllProperties<T>(T entity) where T : class
     {
-        if (entity == null) return Enumerable.Empty<PropertyInfo>();
+        if (entity is null) return Enumerable.Empty<PropertyInfo>();
         return entity.GetType().GetProperties();
     }
 
@@ -71,7 +71,7 @@ public static class PropertiesHelper
         if (attributes.Length > 0)
         {
             dynamic write = attributes.FirstOrDefault(x => x.GetType().Name == typeof(ReadOnlyAttribute).Name);
-            if (write != null)
+            if (write is not null)
             {
                 return write.IsReadOnly;
             }

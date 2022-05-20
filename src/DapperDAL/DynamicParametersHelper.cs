@@ -18,23 +18,23 @@ public static class DynamicParametersHelper<T> where T : class
         return returnParameters;
     }
 
-    public static DynamicParameters DynamicParametersUpdate(object setParameters, DynamicParameters whereParameters = null)
+    public static DynamicParameters DynamicParametersUpdate(object setParameters, DynamicParameters? whereParameters = null)
     {
         DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
 
         foreach(var property in setParameters.GetType().GetProperties())
         {
-            if (whereParameters != null && whereParameters.ParameterNames.Contains(property.Name))
+            if (whereParameters is not null && whereParameters.ParameterNames.Contains(property.Name))
                 continue;
 
             // if we have where parameters ignore Id types since they will already be included
-            if (whereParameters != null && property.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+            if (whereParameters is not null && property.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
                 continue;
 
             var attributes = property.GetCustomAttributes(true);
 
             // if we have where parameters ignore [Key] types since they will already be included
-            if (whereParameters != null && attributes.Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name))
+            if (whereParameters is not null && attributes.Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name))
                 continue;
 
             // don't include [IgnoreUpdate] or [NotMapped]
@@ -45,7 +45,7 @@ public static class DynamicParametersHelper<T> where T : class
 
             var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
 
-            object v = property.GetValue(setParameters, null);
+            object? v = property.GetValue(setParameters, null);
 
             returnParameters.Add($"@{useProperty.Name}", v);
         }
@@ -60,23 +60,23 @@ public static class DynamicParametersHelper<T> where T : class
     /// <param name="passedParameters">The parameter values of the entity</param>
     /// <param name="whereParameters">Optional whereParameters if previously generated.</param>
     /// <returns>The parameters to use in a Get operation.</returns>
-    public static DynamicParameters DynamicParametersFromGet(DynamicParameters whereParameters = null)
+    public static DynamicParameters DynamicParametersFromGet(DynamicParameters? whereParameters = null)
     {
         DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
 
         foreach (var property in BuilderCache<T>.Properties)
         {
-            if (whereParameters != null && whereParameters.ParameterNames.Contains(property.Name))
+            if (whereParameters is not null && whereParameters.ParameterNames.Contains(property.Name))
                 continue;
 
             // if we have where parameters ignore Id types since they will already be included
-            if (whereParameters != null && property.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
+            if (whereParameters is not null && property.Name.Equals("Id", StringComparison.OrdinalIgnoreCase))
                 continue;
 
             var attributes = property.GetCustomAttributes(true);
 
             // if we have where parameters ignore [Key] types since they will already be included
-            if (whereParameters != null && attributes.Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
+            if (whereParameters is not null && attributes.Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
                                                                   (attr.GetType().Name == typeof(NonAutoKeyAttribute).Name)))
                 continue;
 
@@ -89,7 +89,7 @@ public static class DynamicParametersHelper<T> where T : class
             int stringLength = 0;
 
             dynamic columnAttribute = attributes.FirstOrDefault(attr => attr.GetType().Name == typeof(ColumnAttribute).Name);
-            if (columnAttribute != null)
+            if (columnAttribute is not null)
                 stringLength = columnAttribute.Length;
 
             string name = $"@{property.Name}";

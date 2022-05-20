@@ -9,7 +9,7 @@ public static class Resolvers
     {
         var tableattr = type.GetCustomAttributes(true).SingleOrDefault(attr => 
             attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
-        if (tableattr != null)
+        if (tableattr is not null)
         {
             if (!string.IsNullOrEmpty(tableattr.Schema))
                 return $"{Encapsulate(tableattr.Schema)}.{Encapsulate(tableattr.Name)}";
@@ -24,7 +24,7 @@ public static class Resolvers
     {
         var columnattr = propertyInfo.GetCustomAttributes(true).SingleOrDefault(attr => 
             attr.GetType().Name == typeof(ColumnAttribute).Name) as dynamic;
-        if (columnattr != null)
+        if (columnattr is not null)
             return Encapsulate(columnattr.Name);
         return Encapsulate(propertyInfo.Name);
     }

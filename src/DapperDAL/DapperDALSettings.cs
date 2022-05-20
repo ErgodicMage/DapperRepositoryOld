@@ -12,7 +12,7 @@ namespace DapperDAL;
 /// </summary>
 public static class DapperDALSettings
 {
-    public static string ConnectionStrings(string connectionName) =>
+    public static string? ConnectionStrings(string connectionName) =>
         DapperDALCache.Cache.Get(ConnectionKey(connectionName)) as string;
 
 

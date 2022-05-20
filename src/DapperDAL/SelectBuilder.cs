@@ -16,7 +16,7 @@ public static class SelectBuilder<T> where T : class
         return sb.ToString();
     }
 
-    public static string BuildSelectStatement(object whereConditions = null, object order = null, int? maxRows = null, bool? distinct = null)
+    public static string BuildSelectStatement(object? whereConditions = null, object? order = null, int? maxRows = null, bool? distinct = null)
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("SELECT ");
@@ -32,13 +32,13 @@ public static class SelectBuilder<T> where T : class
         sb.Append(" FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
-        if (whereConditions != null)
+        if (whereConditions is not null)
         {
             sb = sb.Append(" WHERE ");
             WhereBuilder<T>.BuildWhereString(sb, whereConditions);
         }
 
-        if (order != null)
+        if (order is not null)
         {
             sb.Append(" ORDER BY ");
             BuildOrderBy(sb, order);
@@ -47,7 +47,7 @@ public static class SelectBuilder<T> where T : class
         return sb.ToString();
     }
 
-    public static string BuildSelectStatement(string whereConditions, object order = null, int? maxRows = null, bool? distinct = null)
+    public static string BuildSelectStatement(string whereConditions, object? order = null, int? maxRows = null, bool? distinct = null)
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("SELECT ");
@@ -66,7 +66,7 @@ public static class SelectBuilder<T> where T : class
         if (!string.IsNullOrEmpty(whereConditions))
             sb = sb.Append($" WHERE {whereConditions}");
 
-        if (order != null)
+        if (order is not null)
         {
             sb.Append(" ORDER BY ");
             BuildOrderBy(sb, order);
