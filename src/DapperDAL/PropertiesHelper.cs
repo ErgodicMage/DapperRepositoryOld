@@ -22,11 +22,12 @@ public static class PropertiesHelper
 
     public static IEnumerable<PropertyInfo> GetIdProperties(Type type)
     {
-        var tp = type.GetProperties().Where(p => p.GetCustomAttributes(true).Any(attr =>
-            attr.GetType().Name == typeof(KeyAttribute).Name));
-        if (!tp.Any())
-            tp = type.GetProperties().Where(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
-        return tp;
+        var ids = type.GetProperties().Where(p => p.GetCustomAttributes(true).Any(attr =>
+            (attr.GetType().Name == typeof(KeyAttribute).Name) || (attr.GetType().Name == typeof(NonAutoKeyAttribute).Name)));
+
+        if (!ids.Any())
+            ids = type.GetProperties().Where(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
+        return ids;
     }
 
     public static IEnumerable<PropertyInfo> GetUpdateableProperties<T>() where T : class

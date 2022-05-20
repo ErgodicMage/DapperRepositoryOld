@@ -76,7 +76,8 @@ public static class DynamicParametersHelper<T> where T : class
             var attributes = property.GetCustomAttributes(true);
 
             // if we have where parameters ignore [Key] types since they will already be included
-            if (whereParameters != null && attributes.Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name))
+            if (whereParameters != null && attributes.Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
+                                                                  (attr.GetType().Name == typeof(NonAutoKeyAttribute).Name)))
                 continue;
 
             // don't include [IgnoreSelect] or [NotMapped]

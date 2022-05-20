@@ -62,7 +62,8 @@ public static class InsertBuilder<T> where T : class
     public static void BuildOutputStatement(StringBuilder sb)
     {
         var outputProperties = BuilderCache<T>.ScaffoldProperties.Where(p => p.PropertyType != typeof(string) &&
-              p.GetCustomAttributes(true).Any(attr => attr.GetType().Name == typeof(KeyAttribute).Name));
+              p.GetCustomAttributes(true).Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
+                                             (attr.GetType().Name == typeof(NonAutoKeyAttribute).Name)));
 
         if (!outputProperties.Any())
             return;

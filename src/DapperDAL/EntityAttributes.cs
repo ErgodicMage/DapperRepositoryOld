@@ -38,6 +38,11 @@ public class KeyAttribute : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Property)]
+public class NonAutoKeyAttribute : Attribute
+{
+}
+
+[AttributeUsage(AttributeTargets.Property)]
 public class NotMappedAttribute : Attribute
 {
 }
@@ -50,7 +55,7 @@ public class RequiredAttribute : Attribute
 [AttributeUsage(AttributeTargets.Property)]
 public class EditableAttribute : Attribute
 {
-    public EditableAttribute(bool iseditable)
+    public EditableAttribute(bool iseditable = true)
     {
         AllowEdit = iseditable;
     }
@@ -61,12 +66,6 @@ public class EditableAttribute : Attribute
 [AttributeUsage(AttributeTargets.Property)]
 public class ReadOnlyAttribute : Attribute
 {
-    public ReadOnlyAttribute(bool isReadOnly)
-    {
-        IsReadOnly = isReadOnly;
-    }
-
-    public bool IsReadOnly { get; init; }
 }
 
 [AttributeUsage(AttributeTargets.Property)]
