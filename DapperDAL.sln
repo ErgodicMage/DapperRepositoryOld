@@ -9,12 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DapperDAL", "src\DapperDAL\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9E807EE-CFD0-47E3-891D-45D1AC6E8298}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{B17530AC-D114-4D05-A174-D6376312D4E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositionDAL", "Examples\CompositionDAL\CompositionDAL.csproj", "{40BD5756-C507-4074-B922-3EB81CBAF0FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompositionDAL", "Examples\CompositionDAL\CompositionDAL.csproj", "{40BD5756-C507-4074-B922-3EB81CBAF0FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
