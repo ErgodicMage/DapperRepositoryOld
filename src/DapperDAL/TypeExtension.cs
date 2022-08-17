@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public static class TypeExtension
+internal static class TypeExtension
 {
     //You can't insert or update complex types. Lets filter them out.
     public static bool IsSimpleType(this Type type)

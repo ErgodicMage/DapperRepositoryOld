@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public static class PropertiesHelper
+internal static class PropertiesHelper
 {
     public static IEnumerable<PropertyInfo> GetAllProperties<T>(T entity) where T : class
     {

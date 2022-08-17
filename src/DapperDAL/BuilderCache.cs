@@ -5,7 +5,7 @@
 /// The specific property (such as SelectColumn) is built the first time it is reference and all other references.
 /// </summary>
 /// <typeparam name="T">The Entity type</typeparam>
-public class BuilderCache<T> where T : class
+internal class BuilderCache<T> where T : class
 {
     #region Cached Properties
     public static string SelectColumns => GetorSet("SelectColumns", SelectBuilder<T>.BuildSelectColumns);

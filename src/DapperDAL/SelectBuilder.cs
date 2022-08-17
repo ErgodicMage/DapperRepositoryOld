@@ -10,7 +10,7 @@ public static class SelectBuilder<T> where T : class
         sb.Append(" FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
-        sb = sb.Append(" WHERE ");
+        sb.Append(" WHERE ");
         sb.Append(BuilderCache<T>.WhereIdString);
 
         return sb.ToString();
@@ -34,7 +34,7 @@ public static class SelectBuilder<T> where T : class
 
         if (whereConditions is not null)
         {
-            sb = sb.Append(" WHERE ");
+            sb.Append(" WHERE ");
             WhereBuilder<T>.BuildWhereString(sb, whereConditions);
         }
 
@@ -64,13 +64,27 @@ public static class SelectBuilder<T> where T : class
         sb.Append(BuilderCache<T>.TableName);
 
         if (!string.IsNullOrEmpty(whereConditions))
-            sb = sb.Append($" WHERE {whereConditions}");
+            sb.Append($" WHERE {whereConditions}");
 
         if (order is not null)
         {
             sb.Append(" ORDER BY ");
             BuildOrderBy(sb, order);
         }
+
+        return sb.ToString();
+    }
+
+    public static string BuildCountStatement() => $"SELECT COUNT(1) FROM {BuilderCache<T>.TableName}";
+
+    public static string BuildCountStatement(string whereConditions)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("SELECT COUNT(1) FROM ");
+        sb.Append(BuilderCache<T>.TableName);
+
+        if (!string.IsNullOrEmpty(whereConditions))
+            sb.Append($" WHERE {whereConditions}");
 
         return sb.ToString();
     }

@@ -17,7 +17,7 @@ public static class DeleteBuilder<T> where T : class
     public static string BuildDeleteStatement(object whereConditions)
     {
         if (whereConditions == null)
-            throw new ArgumentNullException("whereConditions are required for delete statements");
+            throw new ArgumentNullException(nameof(whereConditions));
 
         StringBuilder sb = new StringBuilder();
         sb.Append("DELETE FROM ");

@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public static class DynamicParametersHelper<T> where T : class
+internal static class DynamicParametersHelper<T> where T : class
 {
     public static DynamicParameters DynamicParametersFromWhere(object parameters)
     {

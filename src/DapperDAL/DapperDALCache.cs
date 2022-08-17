@@ -3,7 +3,7 @@
 namespace DapperDAL;
 
 // This needs more work to prevent race conditions
-public static class DapperDALCache
+internal static class DapperDALCache
 {
     private static IMemoryCache _cache;
     public static IMemoryCache Cache { get => _cache; internal set { _cache = value; } }

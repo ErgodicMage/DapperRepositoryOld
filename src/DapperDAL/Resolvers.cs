@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public static class Resolvers
+internal static class Resolvers
 {
     public static string Encapsulate(string v) => $"[{v}]";
 

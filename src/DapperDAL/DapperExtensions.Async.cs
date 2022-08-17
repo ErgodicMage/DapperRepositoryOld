@@ -162,8 +162,26 @@ public static partial class DapperExtensions
     /// <returns></returns>
     public static Task<int> CountAsync<T>(this IDbConnection connection, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
-        string sql = $"SELECT COUNT(1) FROM {BuilderCache<T>.TableName}";
+        string sql = SelectBuilder<T>.BuildCountStatement();
         return connection.QueryFirstAsync<int>(sql, null, transaction, commandTimeout);
+    }
+
+    /// <summary>
+    /// Returns the number of rows in the table that holds T based upon a where clause
+    /// </summary>
+    /// <typeparam name="T">The Entity type</typeparam>
+    /// <param name="connection">The IDbConnetion to use</param>
+    /// <param name="whereConditions">The direct where clause</param>
+    /// <param name="parameters">The parameters to populate in the where clause</param>
+    /// <param name="transaction">The transaction if in one.</param>
+    /// <param name="commandTimeout">The timeout value, default none.</param>
+    /// <returns></returns>
+    public static Task<int> CountAsync<T>(IDbConnection connection, string whereConditions, object? parameters = null,
+        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = SelectBuilder<T>.BuildCountStatement(whereConditions);
+        var dynParameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
+        return connection.QueryFirstAsync<int>(sql, dynParameters, transaction, commandTimeout);
     }
     #endregion
 
