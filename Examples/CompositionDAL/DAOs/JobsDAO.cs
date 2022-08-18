@@ -16,49 +16,49 @@ public class JobsDAO
     #region Get
     public Job Get(int jobId)
     {
-        var connection = new SqlConnection(ConnectionString);
+        using var connection = new SqlConnection(ConnectionString);
         return connection.GetId<Job>(jobId);
     }
 
     public async Task<Job> GetAsync(int jobId)
     {
-        var connection = new SqlConnection(ConnectionString);
+        using var connection = new SqlConnection(ConnectionString);
         return await connection.GetIdAsync<Job>(jobId);
     }
 
     public Job GetByOrderId(int orderId)
     {
-        var connection = new SqlConnection(ConnectionString);
+        using var connection = new SqlConnection(ConnectionString);
         return connection.Get<Job>(new { OrderId = orderId });
     }
 
     public async Task<Job> GetByOrderIdAsync(int orderId)
     {
-        var connection = new SqlConnection(ConnectionString);
+        using var connection = new SqlConnection(ConnectionString);
         return await connection.GetAsync<Job>(new { OrderId = orderId });
     }
 
     public IEnumerable<Job> GetByStatus(string status)
     {
-        var connetion = new SqlConnection(ConnectionString);
+        using var connetion = new SqlConnection(ConnectionString);
         return connetion.GetList<Job>(new { Status = status });
     }
 
     public async Task<IEnumerable<Job>> GetByStatusAsync(string status)
     {
-        var connetion = new SqlConnection(ConnectionString);
+        using var connetion = new SqlConnection(ConnectionString);
         return await connetion.GetListAsync<Job>(new { Status = status });
     }
 
     public IEnumerable<Job> GetByWorkflow(string workflow)
     {
-        var connetion = new SqlConnection(ConnectionString);
+        using var connetion = new SqlConnection(ConnectionString);
         return connetion.GetList<Job>(new { Workflow = workflow }, new {Workflow = true, JobId = false});
     }
 
     public async Task<IEnumerable<Job>> GetByWorkflowAsync(string workflow)
     {
-        var connetion = new SqlConnection(ConnectionString);
+        using var connetion = new SqlConnection(ConnectionString);
         return await connetion.GetListAsync<Job>(new { Workflow = workflow }, new { Workflow = true, JobId = false });
     }
 
