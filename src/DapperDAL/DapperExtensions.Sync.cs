@@ -168,6 +168,23 @@ public static partial class DapperExtensions
     }
 
     /// <summary>
+    /// Returns the number of rows in the table that holds T based upon teh where condition
+    /// </summary>
+    /// <typeparam name="T">The Entity type</typeparam>
+    /// <param name="connection">The IDbConnetion to use</param>
+    /// <param name="whereConditions">The where conditions to query</param>
+    /// <param name="transaction">The transaction if in one.</param>
+    /// <param name="commandTimeout">The timeout value, default none.</param>
+    /// <returns></returns>
+    public static int Count<T>(this IDbConnection connection, object whereConditions,
+        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = SelectBuilder<T>.BuildCountStatement(whereConditions);
+        var parameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
+        return connection.QueryFirst<int>(sql, parameters, transaction, commandTimeout);
+    }
+
+    /// <summary>
     /// Returns the number of rows in the table that holds T based upon a where clause
     /// </summary>
     /// <typeparam name="T">The Entity type</typeparam>
@@ -186,7 +203,7 @@ public static partial class DapperExtensions
     }
     #endregion
 
-        #region Insert Function
+    #region Insert Function
     public static int Insert<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = InsertBuilder<T>.BuildInsertStatement();

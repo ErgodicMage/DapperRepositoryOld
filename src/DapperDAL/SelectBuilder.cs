@@ -75,7 +75,20 @@ public static class SelectBuilder<T> where T : class
         return sb.ToString();
     }
 
-    public static string BuildCountStatement() => $"SELECT COUNT(1) FROM {BuilderCache<T>.TableName}";
+    public static string BuildCountStatement(object? whereConditions = null)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("SELECT COUNT(1) FROM ");
+        sb.Append(BuilderCache<T>.TableName);
+
+        if (whereConditions is not null)
+        {
+            sb.Append(" WHERE ");
+            WhereBuilder<T>.BuildWhereString(sb, whereConditions);
+        }
+
+        return sb.ToString();
+    }
 
     public static string BuildCountStatement(string whereConditions)
     {
