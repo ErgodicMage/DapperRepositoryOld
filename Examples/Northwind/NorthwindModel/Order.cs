@@ -4,11 +4,14 @@
 public class Order
 {
     [Key]
-    public int OrderID { get; set; }
+    [Column("OrderID")]
+    public int OrderId { get; set; }
 
-    public string? CustomerID { get; set; }
+    [Column("CustomerID")]
+    public string? CustomerId { get; set; }
 
-    public int? EmployeeID { get; set; }
+    [Column("EmployeeID")]
+    public int? EmployeeId { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
@@ -31,4 +34,13 @@ public class Order
     public string? ShipPostalCode { get; set; }
 
     public string? ShipCountry { get; set; }
+
+    [NotMapped]
+    public Customer Customer { get; set; }
+
+    [NotMapped]
+    public Employee Employee { get; set; }
+
+    [NotMapped]
+    public IList<OrderDetail> OrderDetails { get; set; }
 }

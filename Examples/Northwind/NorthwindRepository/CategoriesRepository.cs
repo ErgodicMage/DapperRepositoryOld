@@ -24,7 +24,7 @@ public class CategoriesRepository : GenericRepository<Category, int>, ICategorie
 
     public byte[]? GetImage(IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = $"SELECT Picture from [Categories] WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
+        string sql = $"SELECT [Picture] from [Categories] WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
         var prop = WhereBuilder<Category>.GetIdParameters(id);
         return connection.ExecuteScalar<byte[]>(sql, prop, transaction, commandTimeout);
     }
@@ -37,7 +37,7 @@ public class CategoriesRepository : GenericRepository<Category, int>, ICategorie
 
     public Task<byte[]?> GetImageAsync(IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = $"SELECT Picture WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
+        string sql = $"SELECT [Picture] WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
         var prop = WhereBuilder<Category>.GetIdParameters(id);
         return connection.ExecuteScalarAsync<byte[]?>(sql, prop, transaction, commandTimeout);
     }

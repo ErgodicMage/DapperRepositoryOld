@@ -4,14 +4,17 @@
 public class Product
 {
     [Key]
-    public int ProductID { get; set; }
+    [Column("ProductID")]
+    public int ProductId { get; set; }
 
     [Required]
     public string ProductName { get; set; }
 
-    public int? SupplierID { get; set; }
+    [Column("SupplierID")]
+    public int? SupplierId { get; set; }
 
-    public int? CategoryID { get; set; }
+    [Column("CategoryID")]
+    public int? CategoryId { get; set; }
 
     public string? QuantityPerUnit { get; set; }
 
@@ -24,4 +27,10 @@ public class Product
     public short? RecorderLevel { get; set; }
 
     public bool? Discontinued { get; set; }
+
+    [NotMapped]
+    public Category Category { get; set; }
+
+    [NotMapped]
+    public Supplier Supplier { get; set; }
 }

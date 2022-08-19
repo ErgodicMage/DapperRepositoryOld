@@ -1,9 +1,11 @@
 ﻿namespace NorthwindModel;
 
+[Table("Suppliers")]
 public class Supplier
 {
     [Key]
-    public int SupplierID { get; set; }
+    [Column("SupplierID")]
+    public int SupplierId { get; set; }
 
     [Required]
     public string CompanyName { get; set; }
