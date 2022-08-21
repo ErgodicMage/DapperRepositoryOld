@@ -14,13 +14,13 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public T Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetId<T>(key, transaction, commandTimeout);
 
-    public IEnumerable<T> GetList(object whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
         return GetList(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public IEnumerable<T> GetList(IDbConnection connection, object whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public IEnumerable<T> GetList(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetList<T>(whereConditions, orderBy, transaction, commandTimeout);
 
 
@@ -32,28 +32,28 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public int Count(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Count<T>(whereConditions, transaction, commandTimeout);
 
-    public Task<T> GetAsync(Key key, int? commandTimeout = null)
+    public async Task<T> GetAsync(Key key, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetAsync(connection, key, null, commandTimeout);
+        return await GetAsync(connection, key, null, commandTimeout);
     }
 
     public Task<T> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetIdAsync<T>(key, transaction, commandTimeout);
 
-    public Task<IEnumerable<T>> GetListAsync(object whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetListAsync(connection, whereConditions, orderBy, null, commandTimeout);
+        return await GetListAsync(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetListAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
 
-    public Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
+    public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return CountAsync(connection, whereConditions, null, commandTimeout);
+        return await CountAsync(connection, whereConditions, null, commandTimeout);
     }
 
     public Task<int> CountAsync(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
@@ -73,10 +73,10 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
         return connection.ExecuteScalar<Key>(sql, entity, transaction, commandTimeout);
     }
 
-    public Task<Key> InsertAsync(T entity, int? commandTimeout = null)
+    public async Task<Key> InsertAsync(T entity, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return InsertAsync(connection, entity, null, commandTimeout);
+        return await InsertAsync(connection, entity, null, commandTimeout);
     }
 
     public Task<Key> InsertAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
@@ -105,19 +105,19 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public int Update(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Update<T>(where, set, transaction, commandTimeout);
 
-    public Task<int> UpdateAsync(T entity, int? commandTimeout = null)
+    public async Task<int> UpdateAsync(T entity, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return UpdateAsync(connection, entity, null, commandTimeout);
+        return await UpdateAsync(connection, entity, null, commandTimeout);
     }
 
     public Task<int> UpdateAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.UpdateAsync<T>(entity, transaction, commandTimeout);
 
-    public Task<int> UpdateAsync(object where, object set, int? commandTimeout = null)
+    public async Task<int> UpdateAsync(object where, object set, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return UpdateAsync(connection, where, set, null, commandTimeout);
+        return await UpdateAsync(connection, where, set, null, commandTimeout);
     }
 
     public Task<int> UpdateAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
@@ -147,10 +147,10 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public int Delete(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.DeleteWhere<T>(whereConditions, transaction, commandTimeout);
 
-    public Task<int> DeleteAsync(Key id, int? commandTimeout = null)
+    public async Task<int> DeleteAsync(Key id, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return DeleteAsync(connection, id, null, commandTimeout);
+        return await DeleteAsync(connection, id, null, commandTimeout);
     }
 
     public Task<int> DeleteAsync(IDbConnection connection, Key id, IDbTransaction? transaction = null, int? commandTimeout = null)
@@ -160,10 +160,10 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
         return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 
-    public Task<int> DeleteAsync(object whereConditions, int? commandTimeout = null)
+    public async Task<int> DeleteAsync(object whereConditions, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return DeleteAsync(connection, whereConditions, null, commandTimeout);
+        return await DeleteAsync(connection, whereConditions, null, commandTimeout);
     }
 
     public Task<int> DeleteAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)

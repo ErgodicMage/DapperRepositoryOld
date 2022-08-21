@@ -85,7 +85,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>An Enumerable of the entities found.</returns>
-    public static IEnumerable<T> GetList<T>(this IDbConnection connection, object whereConditions, object? orderBy = null,
+    public static IEnumerable<T> GetList<T>(this IDbConnection connection, object? whereConditions = null, object? orderBy = null,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
@@ -122,11 +122,11 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>An Enumerable of the entities found.</returns>
-    public static IEnumerable<T> GetListLargeProperties<T>(this IDbConnection connection, object whereConditions, object? orderBy = null,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public static IEnumerable<T> GetListLargeProperties<T>(this IDbConnection connection, object? whereConditions = null, 
+        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
-        var parameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
+        var parameters = whereConditions is null ? new DynamicParameters() : DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
         parameters = DynamicParametersHelper<T>.DynamicParametersFromGet(parameters);
         return connection.Query<T>(sql, parameters, transaction, true, commandTimeout);
     }
