@@ -33,9 +33,8 @@ public class PersonDAO
     public int Insert(Person person)
     {
         using var connection = new SqlConnection(ConnectionString);
-        int id = connection.Insert<Person>(person);
-        person.Id = id;
-        return id;
+        person.Id = connection.Insert<Person>(person);
+        return person.Id;
     }
 
     public int Update(Person person)
@@ -72,4 +71,12 @@ public class Person
 }
 ```
 The PerssonDAO does not change from the previous example. 
-DapperDAL automatcally generates the proper SQL to match the (almost) POCO.
+DapperDAL automatcally generates the proper SQL to match the POCO.
+
+
+#### ToDo
+- Improve DapperDALSettings
+- Add Guid primary keys
+- ~~Add Generic Repository Pattern~~
+- Add Unit of Work Pattern
+- Add automatically join queries and results
