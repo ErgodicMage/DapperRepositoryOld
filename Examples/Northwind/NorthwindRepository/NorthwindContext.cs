@@ -14,15 +14,15 @@ public class NorthwindContext
     #endregion
 
     #region Repositories
-    ICategoriesRepository CategoryRepository() => new CategoryRepository(_connectionStringName);
-    ICustomerRepository CustomerRepository() => new CustomerRepository(_connectionStringName);
-    IEmployeeRepository EmployeeRepository() => new EmployeeRepository(_connectionStringName);
-    IEmployeeTerritoriesRepository EmployeeTerritoriesRepository() => new EmployeeTerritoriesRepository(_connectionStringName);
-    ITerritoryRepository TerritoryRepository() => new TerritoryRepository(_connectionStringName);
-    IOrderRepository OrderRepository() => new OrderRepository(_connectionStringName);
-    IOrderDetailRepository OrderDetailRepository() => new OrderDetailRepository(_connectionStringName);
-    IProductRepository ProductRepository() => new ProductRepository(_connectionStringName);
-    ISupplierRepository SupplierRepository() => new SupplierRepository(_connectionStringName);
+    public ICategoriesRepository CategoryRepository() => new CategoryRepository(_connectionStringName);
+    public ICustomerRepository CustomerRepository() => new CustomerRepository(_connectionStringName);
+    public IEmployeeRepository EmployeeRepository() => new EmployeeRepository(_connectionStringName);
+    public IEmployeeTerritoriesRepository EmployeeTerritoriesRepository() => new EmployeeTerritoriesRepository(_connectionStringName);
+    public ITerritoryRepository TerritoryRepository() => new TerritoryRepository(_connectionStringName);
+    public IOrderRepository OrderRepository() => new OrderRepository(_connectionStringName);
+    public IOrderDetailRepository OrderDetailRepository() => new OrderDetailRepository(_connectionStringName);
+    public IProductRepository ProductRepository() => new ProductRepository(_connectionStringName);
+    public ISupplierRepository SupplierRepository() => new SupplierRepository(_connectionStringName);
     #endregion
 
     #region Category Functions
