@@ -14,7 +14,7 @@ public class NorthwindContext
     #endregion
 
     #region Repositories
-    ICategoriesRepository CategoryRepository() => new CategoriesRepository(_connectionStringName);
+    ICategoriesRepository CategoryRepository() => new CategoryRepository(_connectionStringName);
     ICustomerRepository CustomerRepository() => new CustomerRepository(_connectionStringName);
     IEmployeeRepository EmployeeRepository() => new EmployeeRepository(_connectionStringName);
     IEmployeeTerritoriesRepository EmployeeTerritoriesRepository() => new EmployeeTerritoriesRepository(_connectionStringName);

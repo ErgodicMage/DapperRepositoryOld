@@ -1,9 +1,9 @@
 ﻿namespace NorthwindRepository;
 
-public class CategoriesRepository : GenericRepository<Category, int>, ICategoriesRepository
+public class CategoryRepository : GenericRepository<Category, int>, ICategoriesRepository
 {
     #region Constructor
-    public CategoriesRepository(string connectionStringName)
+    public CategoryRepository(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
     }
