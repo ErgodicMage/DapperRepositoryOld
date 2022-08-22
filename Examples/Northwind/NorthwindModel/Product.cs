@@ -24,7 +24,7 @@ public class Product
 
     public short? UnitsOnOrder { get; set; }
 
-    public short? RecorderLevel { get; set; }
+    public short? ReorderLevel { get; set; }
 
     public bool? Discontinued { get; set; }
 

@@ -19,7 +19,7 @@ public class Order
 
     public DateTime? ShippedDate { get; set; }
 
-    public int? ShippedVia { get; set; }
+    public int? ShipVia { get; set; }
 
     public double? Freight { get; set; }
 
