@@ -8,6 +8,7 @@ public class Customer
     public string CustomerId { get; set; }
 
     [Required]
+    [Column("CompanyName")]
     public string CustomerName { get; set; }
 
     public string? ContactName { get; set; }

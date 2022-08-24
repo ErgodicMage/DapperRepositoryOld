@@ -1,16 +1,15 @@
-﻿using NorthwindModel;
-using System.Text.RegularExpressions;
-
-namespace NorthwindRepository;
+﻿namespace NorthwindRepository;
 
 public class NorthwindContext
 {
-    private readonly string _connectionStringName;
     #region Constructors
     public NorthwindContext(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
     }
+
+    private readonly string _connectionStringName;
+    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
     #endregion
 
     #region Repositories
@@ -112,48 +111,198 @@ public class NorthwindContext
     #endregion
 
     #region Order Functions
-    public Order GetCompleteOrder(int orderId)
+    public Order GetOrderWithDetailsExperiment(int orderId)
     {
-        var orderRepository = OrderRepository();
-        var order = orderRepository.Get(orderId);
-        if (order is null) 
-            return null;
+        string sql = "select o.*, null as SEPERATOR, od.* from Orders as o inner join [Order Details] as od on o.OrderID = od.OrderID where o.orderID=@OrderID";
 
-        order.OrderDetails = GetCompleteOrderDetail(orderId).ToList();
+        using var connection = new SqlConnection(ConnectionString);
+
+        Order order = null;
+        _ = connection.Query<Order, OrderDetail, Order>(sql, (o, od) =>
+            {
+                order ??= o;
+                order.OrderDetails ??= new List<OrderDetail>();
+                order.OrderDetails.Add(od);
+                return o;
+            },
+            splitOn: "SEPERATOR",
+            param: new {OrderID = orderId }
+            );
+
         return order;
     }
 
-    public async Task<Order> GetCompleteOrderAsync(int orderId)
+    public Order GetOrderWithDetails(int orderId)
+    {
+        var orderRepository = OrderRepository();
+        var order = orderRepository.Get(orderId);
+        if (order is null)
+            return null;
+
+        order.OrderDetails = GetOrderDetailsWithProduct(orderId).ToList();
+        return order;
+    }
+
+    public Order GetOrderWithDetailsMutli(int orderId)
+    {
+        var whereCondition = new { OrderId = orderId };
+        string orderSql = SelectBuilder<Order>.BuildSqlSelectIdString();
+        string orderDetailSql = SelectBuilder<OrderDetail>.BuildSelectStatement(whereCondition);
+        string sql = $"{orderSql} {orderDetailSql}";
+
+        using var connection = new SqlConnection(ConnectionString);
+
+        using var results = connection.QueryMultiple(sql, whereCondition);
+        var order = results.Read<Order>().Single();
+
+        if (order is null)
+            return null;
+
+        var orderDetail = results.Read<OrderDetail>();
+
+        if (orderDetail.Any())
+            order.OrderDetails = orderDetail.ToList();
+
+        return order;
+    }
+
+    private string AddAliasToColumns(string sqlColumns, string alias)
+    {
+        string[] columns = sqlColumns.Split(',');
+        StringBuilder sb = new StringBuilder();
+        bool first = true;
+        foreach (string column in columns)
+        {
+            if (!first)
+                sb.Append(',');
+            sb.Append(alias);
+            sb.Append('.');
+            sb.Append(column);
+            first = false;
+        }
+        return sb.ToString();
+    }
+
+    private string MakeOnStatement(string firstColumn, string firstAlias, string secondColumn, string secondAlias )
+    {
+        return $" ON {firstAlias}.[{firstColumn}]={secondAlias}.[{secondColumn}]";
+    }
+
+    private string GetOrderInfoSql()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("SELECT ");
+        string fixedColumns = AddAliasToColumns(BuilderCache<Order>.SelectColumns, "o");
+        sb.Append(fixedColumns);
+        sb.Append(", null as SEPERATOR, ");
+        fixedColumns = AddAliasToColumns(BuilderCache<Customer>.SelectColumns, "c");
+        sb.Append(fixedColumns);
+        sb.Append(", null as SEPERATOR, ");
+        fixedColumns = AddAliasToColumns(BuilderCache<Employee>.SelectColumns, "e");
+        sb.Append(fixedColumns);
+        sb.Append(" FROM ");
+        sb.Append($"{BuilderCache<Order>.TableName} AS o");
+        sb.Append(" LEFT JOIN ");
+        sb.Append($"{BuilderCache<Customer>.TableName} AS c");
+        sb.Append(MakeOnStatement("CustomerID", "o", "CustomerID", "c"));
+        sb.Append(" LEFT JOIN ");
+        sb.Append($"{BuilderCache<Employee>.TableName} AS e");
+        sb.Append(MakeOnStatement("EmployeeID", "o", "EmployeeID", "e"));
+        sb.Append($" WHERE {BuilderCache<Order>.WhereIdString}");
+        return sb.ToString();
+    }
+
+    public Order GetOrderInformation(int orderId)
+    {
+        //string sql = "select o.*, null as SEPERATOR, c.*, null as SEPERATOR, e.* from Orders as o left join Customers as c on c.CustomerID=o.CustomerID left join Employees as e on e.EmployeeID=o.EmployeeID where o.OrderID=@OrderId";
+
+        string sql = GetOrderInfoSql();
+
+        using var connection = new SqlConnection(ConnectionString);
+        var order = connection.Query<Order, Customer, Employee, Order>(sql,
+            (o, c, e) =>
+            {
+                o.Customer = c;
+                o.Employee = e;
+                return o;
+            },
+            splitOn: "SEPERATOR",
+            param: new {OrderId = orderId}
+            )
+            .First();
+
+        if (order is null)
+            return null;
+
+        order.OrderDetails = GetOrderDetailsWithProduct(orderId).ToList();
+
+        return order;
+    }
+
+    public async Task<Order> GetOrderWithDetailsAsync(int orderId)
     {
         var orderRepository = OrderRepository();
         var order = await orderRepository.GetAsync(orderId);
         if (order is null)
             return null;
 
-        var orderDetails = await GetCompleteOrderDetailAsync(orderId);
+        var orderDetails = await GetOrderDetailsWithProductAsync(orderId);
         order.OrderDetails = orderDetails.ToList();
         return order;
     }
     #endregion
 
     #region OrderDetail Functions
-    public IEnumerable<OrderDetail> GetCompleteOrderDetail(int orderId)
+    public IEnumerable<OrderDetail> GetCompleteOrderDetailsOld(int orderId)
     {
         var orderDetailRepository = OrderDetailRepository();
         var orderDetails = orderDetailRepository.GetList(new { OrderId = orderId });
+
+        foreach (var orderDetail in orderDetails)
+            orderDetail.Product = GetCompleteProduct(orderDetail.ProductId);
+
         return orderDetails;
     }
 
-    public async Task<IEnumerable<OrderDetail>> GetCompleteOrderDetailAsync(int orderId)
+    public IEnumerable<OrderDetail> GetOrderDetailsWithProduct(int orderId)
     {
-        var orderDetailRepository = OrderDetailRepository();
-        var orderDetails = await orderDetailRepository.GetListAsync(new { OrderId = orderId });
+        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=10248";
+
+        using var connection = new SqlConnection(ConnectionString);
+
+        var orderDetails = connection.Query<OrderDetail, Product, OrderDetail>(sql, (o, p) => 
+        { 
+            o.Product = p;
+            return o; 
+        },
+        splitOn: "SEPERATOR",
+        param: new {OrderID = orderId}
+        );
+
+        return orderDetails;
+    }
+
+    public async Task<IEnumerable<OrderDetail>> GetOrderDetailsWithProductAsync(int orderId)
+    {
+        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=10248";
+
+        using var connection = new SqlConnection(ConnectionString);
+
+        var orderDetails = await connection.QueryAsync<OrderDetail, Product, OrderDetail>(sql, (o, p) =>
+        {
+            o.Product = p;
+            return o;
+        },
+        splitOn: "SEPERATOR",
+        param: new { OrderID = orderId }
+        );
+
         return orderDetails;
     }
     #endregion
 
     #region Product Functions
-    public Product GetCompleteProduct(int productId)
+    public Product GetCompleteProductOld(int productId)
     {
         var productRepository = ProductRepository();
         var product = productRepository.Get(productId);
@@ -163,6 +312,25 @@ public class NorthwindContext
         FillProductInfo(product);
 
         return product;
+    }
+
+    public Product GetCompleteProduct(int productId)
+    {
+        string sql = "select p.*, null as SEPERATOR, s.*, null as SEPERATOR, c.* from Products as p left join Categories as c on p.CategoryID=c.CategoryID left join Suppliers as s on p.SupplierID=s.SupplierID where p.ProductID=@ProductId";
+
+        using var connection = new SqlConnection(ConnectionString);
+
+        var products = connection.Query<Product, Supplier, Category, Product>(sql, (p, s, c) =>
+            {
+                p.Supplier = s;
+                p.Category = c;
+                return p;
+            },
+            splitOn: "SEPERATOR",
+            param: new {ProductID = productId}
+            );
+
+        return products?.FirstOrDefault()!;
     }
 
     public void FillProductInfo(Product product)
