@@ -14,6 +14,15 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public T Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetId<T>(key, transaction, commandTimeout);
 
+    public T Get(object whereConditions, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return Get(connection, whereConditions, null, commandTimeout);
+    }
+
+    public T Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.Get<T>(whereConditions, transaction, commandTimeout);
+
     public IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
@@ -40,6 +49,15 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
 
     public Task<T> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetIdAsync<T>(key, transaction, commandTimeout);
+
+    public Task<T> GetAsync(object whereConditions, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return GetAsync(connection, whereConditions, null, commandTimeout);
+    }
+
+    public Task<T> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetAsync<T>(whereConditions, transaction, commandTimeout);
 
     public async Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {

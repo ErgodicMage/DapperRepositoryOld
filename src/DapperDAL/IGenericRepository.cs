@@ -1,10 +1,14 @@
-﻿namespace DapperDAL;
+﻿using System.Threading.Tasks;
+
+namespace DapperDAL;
 
 public interface IGenericRepository<T, Key> where T : class
 {
     #region Get
     T Get(Key key, int? commandTimeout = null);
     T Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);
+    T Get(object whereConditions, int? commandTimeout = null);
+    T Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null);
 
     IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     IEnumerable<T> GetList(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
@@ -15,6 +19,8 @@ public interface IGenericRepository<T, Key> where T : class
 
     Task<T> GetAsync(Key key, int? commandTimeout = null);
     Task<T> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);
+    Task<T> GetAsync(object whereConditions, int? commandTimeout = null);
+    Task<T> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null);
 
     Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
