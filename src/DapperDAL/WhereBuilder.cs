@@ -11,6 +11,7 @@ public static class WhereBuilder<T> where T : class
         var whereProperties = PropertiesHelper.GetAllProperties(whereConditions);
 
         bool first = true;
+
         foreach (var property in whereProperties)
         {
             var useProperty = property;
@@ -39,7 +40,14 @@ public static class WhereBuilder<T> where T : class
             if (useIsNull)
                 sb.Append($"{Resolvers.ResolveColumnName(useProperty)} IS NULL");
             else
-                sb.Append($"{Resolvers.ResolveColumnName(useProperty)}=@{useProperty.Name}");
+            {
+                string op = "=";
+                Type propertyType = property.PropertyType;
+                if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                    op = " IN ";
+
+                sb.Append($"{Resolvers.ResolveColumnName(useProperty)}{op}@{useProperty.Name}");
+            }
         }
     }
 
