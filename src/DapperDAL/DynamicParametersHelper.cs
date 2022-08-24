@@ -4,6 +4,9 @@ internal static class DynamicParametersHelper<T> where T : class
 {
     public static DynamicParameters DynamicParametersFromWhere(object parameters)
     {
+        if (parameters is null)
+            return null;
+
         DynamicParameters returnParameters = new DynamicParameters();
 
         foreach (var property in parameters.GetType().GetProperties())
