@@ -24,7 +24,11 @@ public class CategoryRepository : GenericRepository<Category, int>, ICategoriesR
 
     public byte[]? GetImage(IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = $"SELECT [Picture] from [Categories] WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
+        var tableattr = typeof(Category).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string column = string.IsNullOrWhiteSpace(tableattr?.Alias) ? "[Picture]" : $"{tableattr?.Alias}.[Picture]";
+        string sql = $"SELECT {column} from {BuilderCache<Category>.TableName} WHERE {BuilderCache<Category>.WhereIdString}";
+
         var prop = WhereBuilder<Category>.GetIdParameters(id);
         return connection.ExecuteScalar<byte[]>(sql, prop, transaction, commandTimeout);
     }
@@ -37,7 +41,11 @@ public class CategoryRepository : GenericRepository<Category, int>, ICategoriesR
 
     public Task<byte[]?> GetImageAsync(IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = $"SELECT [Picture] WHERE {WhereBuilder<Category>.BuildIdWhereString()}";
+        var tableattr = typeof(Category).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string column = string.IsNullOrWhiteSpace(tableattr?.Alias) ? "[Picture]" : $"{tableattr?.Alias}.[Picture]";
+        string sql = $"SELECT {column} from {BuilderCache<Category>.TableName} WHERE {BuilderCache<Category>.WhereIdString}";
+
         var prop = WhereBuilder<Category>.GetIdParameters(id);
         return connection.ExecuteScalarAsync<byte[]?>(sql, prop, transaction, commandTimeout);
     }
