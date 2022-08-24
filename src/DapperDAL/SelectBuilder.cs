@@ -63,7 +63,7 @@ public static class SelectBuilder<T> where T : class
         sb.Append(" FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
-        if (!string.IsNullOrEmpty(whereConditions))
+        if (!string.IsNullOrWhiteSpace(whereConditions))
             sb.Append($" WHERE {whereConditions}");
 
         if (order is not null)
@@ -96,7 +96,7 @@ public static class SelectBuilder<T> where T : class
         sb.Append("SELECT COUNT(1) FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
-        if (!string.IsNullOrEmpty(whereConditions))
+        if (!string.IsNullOrWhiteSpace(whereConditions))
             sb.Append($" WHERE {whereConditions}");
 
         return sb.ToString();
@@ -130,6 +130,10 @@ public static class SelectBuilder<T> where T : class
     {
         StringBuilder sb = new StringBuilder();
 
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
+
         var first = true;
         foreach (var property in BuilderCache<T>.ScaffoldProperties)
         {
@@ -139,10 +143,10 @@ public static class SelectBuilder<T> where T : class
 
             if (!first)
                 sb.Append(',');
-            sb.Append(Resolvers.ResolveColumnName(property));
+            sb.Append(Resolvers.ResolveColumnName(property, alias));
 
             string customColumnName = Resolvers.ResolveCustomColumnName(property);
-            if (!string.IsNullOrEmpty(customColumnName))
+            if (!string.IsNullOrWhiteSpace(customColumnName))
                 sb.Append($" as {customColumnName}");
 
             first = false;

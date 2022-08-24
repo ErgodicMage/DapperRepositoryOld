@@ -24,7 +24,6 @@ public class CategoryRepositoryTests
     [Trait("Category", TestCategories.IntegrationTest)]
     public void CategoryDapperDAL()
     {
-        string sql = "SELECT [CategoryID] as [CategoryId],[CategoryName],[Description] FROM [Categories] WHERE [CategoryID]=@CategoryId";
         string connectionString = DapperDALSettings.ConnectionStrings(_connectionStringName);
         using var connection = new SqlConnection(connectionString);
         Category category = connection.GetId<Category>(1);
@@ -35,7 +34,6 @@ public class CategoryRepositoryTests
     [Trait("Category", TestCategories.IntegrationTest)]
     public async Task CategoryDapperDALAsync()
     {
-        string sql = "SELECT [CategoryID] as [CategoryId],[CategoryName],[Description] FROM [Categories] WHERE [CategoryID]=@CategoryId";
         string connectionString = DapperDALSettings.ConnectionStrings(_connectionStringName);
         using var connection = new SqlConnection(connectionString);
         Category category = await connection.GetIdAsync<Category>(1);

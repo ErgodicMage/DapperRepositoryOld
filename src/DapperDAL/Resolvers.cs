@@ -11,30 +11,44 @@ internal static class Resolvers
             attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
         if (tableattr is not null)
         {
-            if (!string.IsNullOrEmpty(tableattr.Schema))
-                return $"{Encapsulate(tableattr.Schema)}.{Encapsulate(tableattr.Name)}";
+            if (!string.IsNullOrWhiteSpace(tableattr.Schema))
+                return $"{tableattr.Schema}.{FinalTableName(tableattr.Name, tableattr.Alias)}";
             else
-                return Encapsulate(tableattr.Name);
+                return FinalTableName(tableattr.Name, tableattr.Alias);
         }
 
         return Encapsulate(type.Name);
     }
 
-    public static string ResolveColumnName(PropertyInfo propertyInfo)
+    public static string ResolveColumnName(PropertyInfo propertyInfo, string? alias = null)
     {
         var columnattr = propertyInfo.GetCustomAttributes(true).SingleOrDefault(attr => 
             attr.GetType().Name == typeof(ColumnAttribute).Name) as dynamic;
         if (columnattr is not null)
-            return Encapsulate(columnattr.Name);
-        return Encapsulate(propertyInfo.Name);
+            return FinalColumnName(columnattr.Name, alias);
+        return FinalColumnName(propertyInfo.Name, alias);
     }
 
-    public static string ResolveCustomColumnName(PropertyInfo propertyInfo)
+    public static string ResolveCustomColumnName(PropertyInfo propertyInfo, string? alias = null)
     {
         if (propertyInfo.GetCustomAttributes(true).SingleOrDefault(attr => 
             attr.GetType().Name == typeof(ColumnAttribute).Name) == null)
             return string.Empty;
 
-        return Encapsulate(propertyInfo.Name); 
+        return FinalColumnName(propertyInfo.Name, alias); 
+    }
+
+    internal static string FinalTableName(string name, string? alias)
+    {
+        if (name == null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(alias)) return $"{Encapsulate(name)} as {alias}";
+        return Encapsulate(name);
+    }
+
+    internal static string FinalColumnName(string name, string? alias)
+    {
+        if (name == null) return string.Empty;
+        if (!string.IsNullOrWhiteSpace(alias)) return $"{alias}.{Encapsulate(name)}";
+        return Encapsulate(name);
     }
 }

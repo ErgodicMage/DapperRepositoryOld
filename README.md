@@ -70,11 +70,12 @@ public class Person
     public string LastName {get; set;}
 }
 ```
-The PerssonDAO does not change from the previous example. 
+The PersonDAO does not change from the previous example. 
 DapperDAL automatcally generates the proper SQL to match the POCO.
 
 
 #### ToDo
+- ~~Add in Table Aliases~~
 - Improve DapperDALSettings
 - Add Guid primary keys
 - ~~Add Generic Repository Pattern~~

@@ -3,20 +3,18 @@
 [AttributeUsage(AttributeTargets.Class)]
 public class TableAttribute : Attribute
 {
-    public TableAttribute(string tableName)
+    public TableAttribute(string tableName, string alias = null, string schema = null)
     {
         Name = tableName;
-    }
-
-    public TableAttribute(string tableName, string schema)
-    {
-        Name = tableName;
+        Alias = alias;
         Schema = schema;
     }
 
     public string Name { get; init; }
 
     public string Schema { get; init; }
+
+    public string Alias { get; set; }
 }
 
 [AttributeUsage(AttributeTargets.Property)]

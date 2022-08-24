@@ -9,6 +9,9 @@ public static class WhereBuilder<T> where T : class
     public static void BuildWhereString(StringBuilder sb, object whereConditions)
     {
         var whereProperties = PropertiesHelper.GetAllProperties(whereConditions);
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
 
         bool first = true;
 
@@ -46,7 +49,7 @@ public static class WhereBuilder<T> where T : class
                 if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
                     op = " IN ";
 
-                sb.Append($"{Resolvers.ResolveColumnName(useProperty)}{op}@{useProperty.Name}");
+                sb.Append($"{Resolvers.ResolveColumnName(useProperty, alias)}{op}@{useProperty.Name}");
             }
         }
     }
@@ -72,13 +75,17 @@ public static class WhereBuilder<T> where T : class
     public static string BuildIdWhereString()
     {
         StringBuilder sb = new StringBuilder();
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
+
         bool first = true;
         foreach (PropertyInfo property in BuilderCache<T>.IdProperties)
         {
             if (!first)
                 sb.Append(" AND ");
 
-            sb.Append($"{Resolvers.ResolveColumnName(property)}=@{property.Name}");
+            sb.Append($"{Resolvers.ResolveColumnName(property, alias)}=@{property.Name}");
             first = false;
         }
 

@@ -12,12 +12,16 @@ public static class InsertBuilder<T> where T : class
     {
         StringBuilder sb = new StringBuilder();
 
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
+
         sb.Append("INSERT INTO ");
         sb.Append(BuilderCache<T>.TableName);
         sb.Append('(');
-        BuildInsertColumns(sb);
+        BuildInsertColumns(sb, alias);
         sb.Append(") ");
-        BuildOutputStatement(sb);
+        BuildOutputStatement(sb, alias);
         sb.Append(" VALUES (");
         BuildInsertValues(sb);
         sb.Append(')');
@@ -25,7 +29,7 @@ public static class InsertBuilder<T> where T : class
         return sb.ToString();
     }
 
-    public static void BuildInsertColumns(StringBuilder sb)
+    public static void BuildInsertColumns(StringBuilder sb, string? alias = null)
     {
 
         bool first = true;
@@ -38,7 +42,7 @@ public static class InsertBuilder<T> where T : class
                 sb.Append(", ");
             first = false;
 
-            sb.Append(Resolvers.ResolveColumnName(property));
+            sb.Append(Resolvers.ResolveColumnName(property, alias));
         }
     }
 
@@ -59,7 +63,7 @@ public static class InsertBuilder<T> where T : class
         }
     }
 
-    public static void BuildOutputStatement(StringBuilder sb)
+    public static void BuildOutputStatement(StringBuilder sb, string? alias = null)
     {
         var outputProperties = BuilderCache<T>.ScaffoldProperties.Where(p => p.PropertyType != typeof(string) &&
               p.GetCustomAttributes(true).Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
@@ -77,7 +81,7 @@ public static class InsertBuilder<T> where T : class
             first = false;
 
             sb.Append("INSERTED.");
-            sb.Append(Resolvers.ResolveColumnName(property));
+            sb.Append(Resolvers.ResolveColumnName(property, alias));
         }
     }
 

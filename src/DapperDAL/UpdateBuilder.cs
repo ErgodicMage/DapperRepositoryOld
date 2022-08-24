@@ -46,6 +46,10 @@ public static class UpdateBuilder<T> where T : class
 
     public static void BuildUpdateSetStatement(StringBuilder sb, object updates)
     {
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
+
         bool first = true;
         foreach (var property in updates.GetType().GetProperties())
         {
@@ -60,7 +64,7 @@ public static class UpdateBuilder<T> where T : class
                 sb.Append(", ");
             first = false;
 
-            sb.Append(Resolvers.ResolveColumnName(useProperty));
+            sb.Append(Resolvers.ResolveColumnName(useProperty, alias));
             sb.Append("=@");
             sb.Append(property.Name);
         }
@@ -68,6 +72,10 @@ public static class UpdateBuilder<T> where T : class
 
     public static void BuildUpdateEntitySetStatement(StringBuilder sb)
     {
+        var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
+            attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
+        string? alias = tableattr?.Alias;
+
         bool first = true;
         foreach (var property in BuilderCache<T>.ScaffoldProperties)
         {
@@ -78,7 +86,7 @@ public static class UpdateBuilder<T> where T : class
                 sb.Append(", ");
             first= false;
 
-            sb.Append(Resolvers.ResolveColumnName(property));
+            sb.Append(Resolvers.ResolveColumnName(property, alias));
             sb.Append("=@");
             sb.Append(property.Name);
         }
