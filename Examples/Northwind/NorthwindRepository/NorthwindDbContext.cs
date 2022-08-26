@@ -1,9 +1,9 @@
 ﻿namespace NorthwindRepository;
 
-public class NorthwindContext
+public class NorthwindDbContext
 {
     #region Constructors
-    public NorthwindContext(string connectionStringName)
+    public NorthwindDbContext(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
     }
@@ -75,14 +75,19 @@ public class NorthwindContext
         var employeeTerritoriesRepository = EmployeeTerritoriesRepository();
         var employeeTerritories = employeeTerritoriesRepository.GetList(new { EmployeeId = employeeId });
 
+        var territoryIds = employeeTerritories.Select(t => t.TerritoryId).ToList();
+
         var territoryRepository = TerritoryRepository();
-        employee.Territories = new List<Territory>();
-        foreach (var employeeTerritory in employeeTerritories)
-        {
-            var territory = territoryRepository.Get(employeeTerritory.TerritoryId);
-            if (territory is not null)
-                employee.Territories.Add(territory);
-        }
+        employee.Territories = territoryRepository.GetList( new {TerritoryId = territoryIds}).ToList();
+
+        //var territoryRepository = TerritoryRepository();
+        //employee.Territories = new List<Territory>();
+        //foreach (var employeeTerritory in employeeTerritories)
+        //{
+        //    var territory = territoryRepository.Get(employeeTerritory.TerritoryId);
+        //    if (territory is not null)
+        //        employee.Territories.Add(territory);
+        //}
 
         return employee;
     }
@@ -97,14 +102,11 @@ public class NorthwindContext
         var employeeTerritoriesRepository = EmployeeTerritoriesRepository();
         var employeeTerritories = await employeeTerritoriesRepository.GetListAsync(new { EmployeeId = employeeId });
 
+        var territoryIds = employeeTerritories.Select(t => t.TerritoryId).ToList();
+
         var territoryRepository = TerritoryRepository();
-        employee.Territories = new List<Territory>();
-        foreach (var employeeTerritory in employeeTerritories)
-        {
-            var territory = await territoryRepository.GetAsync(employeeTerritory.TerritoryId);
-            if (territory is not null)
-                employee.Territories.Add(territory);
-        }
+        var territories = await territoryRepository.GetListAsync(new { TerritoryId = territoryIds });
+        employee.Territories = territories.ToList();
 
         return employee;
     }

@@ -6,7 +6,7 @@ public class CategoryRepositoryTests
 {
     private readonly ITestOutputHelper _output;
     private readonly string _connectionStringName = "NorthwindDd";
-    private NorthwindContext _context;
+    private NorthwindDbContext _context;
 
     public CategoryRepositoryTests(ITestOutputHelper output)
     {
@@ -17,7 +17,7 @@ public class CategoryRepositoryTests
 
         DapperDALSettings.Initialize(TestingUtilities.Configuration);
 
-        _context = new NorthwindContext(_connectionStringName);
+        _context = new NorthwindDbContext(_connectionStringName);
     }
 
     [Fact]
