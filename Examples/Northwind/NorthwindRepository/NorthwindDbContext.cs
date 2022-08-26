@@ -22,6 +22,8 @@ public class NorthwindDbContext
     public IOrderDetailRepository OrderDetailRepository() => new OrderDetailRepository(_connectionStringName);
     public IProductRepository ProductRepository() => new ProductRepository(_connectionStringName);
     public ISupplierRepository SupplierRepository() => new SupplierRepository(_connectionStringName);
+    public IRegionRepository RegionRepository() => new RegionRepository(_connectionStringName);
+    public IShipperRepository ShipperRepository() => new ShipperRepository(_connectionStringName);
     #endregion
 
     #region Category Functions
