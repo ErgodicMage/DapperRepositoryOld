@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public class TrimmedStringHandler : SqlMapper.TypeHandler<string>
+internal class TrimmedStringHandler : SqlMapper.TypeHandler<string>
 {
     public override string Parse(object value) => (value as string)?.Trim();
 

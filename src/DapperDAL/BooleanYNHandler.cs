@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public class BooleanYNHandler : SqlMapper.TypeHandler<bool>
+internal class BooleanYNHandler : SqlMapper.TypeHandler<bool>
 {
     public override bool Parse(object value)
     {
