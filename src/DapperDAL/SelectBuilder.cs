@@ -4,7 +4,7 @@ public static class SelectBuilder<T> where T : class
 {
     public static string BuildSqlSelectIdString()
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.Append("SELECT ");
         sb.Append(BuilderCache<T>.SelectColumns);
         sb.Append(" FROM ");
@@ -18,7 +18,7 @@ public static class SelectBuilder<T> where T : class
 
     public static string BuildSelectStatement(object? whereConditions = null, object? order = null, int? maxRows = null, bool? distinct = null)
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.Append("SELECT ");
 
         if (maxRows.HasValue && maxRows.Value > 0)
@@ -49,7 +49,7 @@ public static class SelectBuilder<T> where T : class
 
     public static string BuildSelectStatement(string whereConditions, object? order = null, int? maxRows = null, bool? distinct = null)
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.Append("SELECT ");
 
         if (maxRows.HasValue)
@@ -77,7 +77,7 @@ public static class SelectBuilder<T> where T : class
 
     public static string BuildCountStatement(object? whereConditions = null)
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.Append("SELECT COUNT(1) FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
@@ -92,7 +92,7 @@ public static class SelectBuilder<T> where T : class
 
     public static string BuildCountStatement(string whereConditions)
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.Append("SELECT COUNT(1) FROM ");
         sb.Append(BuilderCache<T>.TableName);
 
@@ -110,7 +110,7 @@ public static class SelectBuilder<T> where T : class
         foreach (var property in orderProperties)
         {          
             if (!first)
-                sb.Append(",");
+                sb.Append(',');
             first = false;
 
             sb.Append(Resolvers.ResolveColumnName(property));
@@ -128,7 +128,7 @@ public static class SelectBuilder<T> where T : class
     /// <returns>string containing the columns to be used in a select statement</returns>
     public static string BuildSelectColumns()
     {
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         var tableattr = typeof(T).GetCustomAttributes(true).SingleOrDefault(attr =>
             attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;

@@ -2,7 +2,7 @@
 
 internal static class DynamicParametersHelper<T> where T : class
 {
-    public static DynamicParameters DynamicParametersFromWhere(object parameters)
+    public static DynamicParameters? DynamicParametersFromWhere(object? parameters)
     {
         if (parameters is null)
             return null;
@@ -13,7 +13,7 @@ internal static class DynamicParametersHelper<T> where T : class
         {
             var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
 
-            object v = property.GetValue(parameters, null);
+            object? v = property.GetValue(parameters, null);
 
             returnParameters.Add($"@{useProperty.Name}", v);
         }
@@ -21,11 +21,11 @@ internal static class DynamicParametersHelper<T> where T : class
         return returnParameters;
     }
 
-    public static DynamicParameters DynamicParametersUpdate(object setParameters, DynamicParameters? whereParameters = null)
+    public static DynamicParameters DynamicParametersUpdate(object? setParameters, DynamicParameters? whereParameters = null)
     {
         DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
 
-        foreach(var property in setParameters.GetType().GetProperties())
+        foreach(var property in setParameters?.GetType().GetProperties())
         {
             if (whereParameters is not null && whereParameters.ParameterNames.Contains(property.Name))
                 continue;

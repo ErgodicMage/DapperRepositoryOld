@@ -53,11 +53,11 @@ internal static class PropertiesHelper
 
     public static bool IsEditable(PropertyInfo pi)
     {
-        var attributes = pi.GetCustomAttributes(false);
-        if (attributes.Length > 0)
+        var attributes = pi?.GetCustomAttributes(false);
+        if (attributes?.Length > 0)
         {
-            dynamic write = attributes.FirstOrDefault(x => x.GetType().Name == typeof(EditableAttribute).Name);
-            if (write != null)
+            dynamic? write = attributes?.FirstOrDefault(x => x.GetType().Name == nameof(EditableAttribute));
+            if (write is not null)
             {
                 return write.AllowEdit;
             }
@@ -67,10 +67,10 @@ internal static class PropertiesHelper
 
     public static bool IsReadOnly(PropertyInfo pi)
     {
-        var attributes = pi.GetCustomAttributes(false);
-        if (attributes.Length > 0)
+        var attributes = pi?.GetCustomAttributes(false);
+        if (attributes?.Length > 0)
         {
-            dynamic write = attributes.FirstOrDefault(x => x.GetType().Name == typeof(ReadOnlyAttribute).Name);
+            dynamic? write = attributes?.FirstOrDefault(x => x.GetType().Name == nameof(ReadOnlyAttribute));
             if (write is not null)
             {
                 return write.IsReadOnly;
