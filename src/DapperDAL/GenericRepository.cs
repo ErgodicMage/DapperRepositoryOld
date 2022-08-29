@@ -87,7 +87,7 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
 
     public Key Insert(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = InsertBuilder<T>.BuildInsertStatement();
+        string sql = BuilderCache<T>.InsertStatement; //InsertBuilder<T>.BuildInsertStatement();
         return connection.ExecuteScalar<Key>(sql, entity, transaction, commandTimeout);
     }
 
@@ -99,7 +99,7 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
 
     public Task<Key> InsertAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
     {
-        string sql = InsertBuilder<T>.BuildInsertStatement();
+        string sql = BuilderCache<T>.InsertStatement; //InsertBuilder<T>.BuildInsertStatement();
         return connection.ExecuteScalarAsync<Key>(sql, entity, transaction, commandTimeout);
     }
     #endregion
