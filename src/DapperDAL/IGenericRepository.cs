@@ -41,15 +41,21 @@ public interface IGenericRepository<T, Key> where T : class
     int Update(T entity, int? commandTimeout = null);
     int Update(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null);
 
-    int Update(object where, object set, int? commandTimeout = null);
-    int Update(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
+    int Update(Key key, object set, int? commandTimeout = null);
+    int Update(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
+
+    int UpdateWhere(object where, object set, int? commandTimeout = null);
+    int UpdateWhere(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
 
 
     Task<int> UpdateAsync(T entity, int? commandTimeout = null);
     Task<int> UpdateAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null);
 
-    Task<int> UpdateAsync(object where, object set, int? commandTimeout = null);
-    Task<int> UpdateAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
+    Task<int> UpdateAsync(Key key, object set, int? commandTimeout = null);
+    Task<int> UpdateAsync(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
+
+    Task<int> UpdateWhereAsync(object where, object set, int? commandTimeout = null);
+    Task<int> UpdateWhereAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null);
     #endregion
 
     #region Delete

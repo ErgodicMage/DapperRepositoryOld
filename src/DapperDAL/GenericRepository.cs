@@ -114,14 +114,23 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public int Update(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Update<T>(entity, transaction, commandTimeout);
 
-    public int Update(object where, object set, int? commandTimeout = null)
+    public int Update(Key key, object set, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return Update(connection, where, set, null, commandTimeout);
+        return Update(connection, key, set, null, commandTimeout);
     }
 
-    public int Update(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.Update<T>(where, set, transaction, commandTimeout);
+    public int Update(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.Update<T, Key>(key, set, transaction, commandTimeout);
+
+    public int UpdateWhere(object where, object set, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return UpdateWhere(connection, where, set, null, commandTimeout);
+    }
+
+    public int UpdateWhere(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.UpdateWhere<T>(where, set, transaction, commandTimeout);
 
     public async Task<int> UpdateAsync(T entity, int? commandTimeout = null)
     {
@@ -132,14 +141,23 @@ public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> whe
     public Task<int> UpdateAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.UpdateAsync<T>(entity, transaction, commandTimeout);
 
-    public async Task<int> UpdateAsync(object where, object set, int? commandTimeout = null)
+    public Task<int> UpdateAsync(Key key, object set, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return await UpdateAsync(connection, where, set, null, commandTimeout);
+        return UpdateAsync(connection, key, set, null, commandTimeout);
     }
 
-    public Task<int> UpdateAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.UpdateAsync<T>(where, set, transaction, commandTimeout);
+    public Task<int> UpdateAsync(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.UpdateAsync<T, Key>(key, set, transaction, commandTimeout);
+
+    public async Task<int> UpdateWhereAsync(object where, object set, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return await UpdateWhereAsync(connection, where, set, null, commandTimeout);
+    }
+
+    public Task<int> UpdateWhereAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.UpdateWhereAsync<T>(where, set, transaction, commandTimeout);
     #endregion
 
     #region Delete

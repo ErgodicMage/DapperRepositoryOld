@@ -225,7 +225,16 @@ public static partial class DapperExtensions
         return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
     }
 
-    public static Task<int> UpdateAsync<T>(this IDbConnection connection, object where, object set, IDbTransaction? transaction = null,
+    public static Task<int> UpdateAsync<T, Key>(this IDbConnection connection, Key key, object set, IDbTransaction? transaction = null,
+    int? commandTimeout = null) where T : class
+    {
+        string sql = UpdateBuilder<T>.BuildUpdateIdStatement(set);
+        var whereParameters = WhereBuilder<T>.GetIdParameters(key);
+        var dynParameters = DynamicParametersHelper<T>.DynamicParametersUpdate(set, whereParameters);
+        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+    }
+
+    public static Task<int> UpdateWhereAsync<T>(this IDbConnection connection, object where, object set, IDbTransaction? transaction = null,
         int? commandTimeout = null) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateStatement(where, set);
