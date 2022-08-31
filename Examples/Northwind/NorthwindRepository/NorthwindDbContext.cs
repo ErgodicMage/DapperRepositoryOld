@@ -270,7 +270,7 @@ public class NorthwindDbContext
 
     public IEnumerable<OrderDetail> GetOrderDetailsWithProduct(int orderId)
     {
-        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=10248";
+        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=@OrderID";
 
         using var connection = new SqlConnection(ConnectionString);
 
@@ -288,7 +288,7 @@ public class NorthwindDbContext
 
     public async Task<IEnumerable<OrderDetail>> GetOrderDetailsWithProductAsync(int orderId)
     {
-        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=10248";
+        string sql = "select od.*, null as SEPERATOR, prod.* from [Order Details] as od left join Products as prod on od.ProductID = prod.ProductID where od.OrderID=@OrderID";
 
         using var connection = new SqlConnection(ConnectionString);
 
@@ -409,6 +409,7 @@ public class NorthwindDbContext
             }
 
             uow.Commit();
+            results = true;
         }
         catch
         {
@@ -442,6 +443,7 @@ public class NorthwindDbContext
             }
 
             await uow.CommitAsync();
+            results = true;
         }
         catch
         {

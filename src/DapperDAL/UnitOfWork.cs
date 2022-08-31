@@ -19,16 +19,25 @@ public class UnitOfWork : IUnitOfWork
     public DbTransaction Transaction { get => _transaction; }
 
 
-    public void Begin() => _transaction = _connection.BeginTransaction();
+    public void Begin()
+    {
+        if (_connection.State == ConnectionState.Closed)
+            _connection.Open();
+        _transaction = _connection.BeginTransaction();
+    }
 
      public void Commit() => _transaction.Commit();
 
     public void Rollback() => _transaction.Rollback();
 
 
-    public async Task BeginAsync() => _transaction = await _connection.BeginTransactionAsync();
-
-
+    public async Task BeginAsync()
+    {
+        if (_connection.State == ConnectionState.Closed)
+            await _connection.OpenAsync();
+        _transaction = await _connection.BeginTransactionAsync();
+    }
+    
     public async Task CommitAsync() => await _transaction.CommitAsync();
 
     public async Task RollbackAsync() => await _transaction.RollbackAsync();
