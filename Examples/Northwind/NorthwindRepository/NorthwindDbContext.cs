@@ -383,4 +383,132 @@ public class NorthwindDbContext
         }
     }
     #endregion
+
+    #region InsertOrder
+    public bool InsertOrder(Order order)
+    {
+        if (order is null || order.OrderDetails is null || order.OrderDetails.Count == 0)
+            return false;
+
+        bool results = false;
+
+        using var connection = new SqlConnection(ConnectionString);
+        using var uow = new UnitOfWork(connection);
+
+        try
+        {
+            uow.Begin();
+            var orderRepository = OrderRepository();
+            order.OrderId = orderRepository.Insert(connection, order, uow.Transaction);
+
+            var orderDetailRepository = OrderDetailRepository();
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                orderDetail.OrderId = order.OrderId;
+                orderDetailRepository.Insert(connection, orderDetail, uow.Transaction);
+            }
+
+            uow.Commit();
+        }
+        catch
+        {
+            uow.Rollback();
+        }
+
+        return results;
+    }
+
+    public async Task<bool> InsertOrderAsync(Order order)
+    {
+        if (order is null || order.OrderDetails is null || order.OrderDetails.Count == 0)
+            return false;
+
+        bool results = false;
+
+        using var connection = new SqlConnection(ConnectionString);
+        using var uow = new UnitOfWork(connection);
+
+        try
+        {
+            await uow.BeginAsync();
+            var orderRepository = OrderRepository();
+            order.OrderId = await orderRepository.InsertAsync(connection, order, uow.Transaction);
+
+            var orderDetailRepository = OrderDetailRepository();
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                orderDetail.OrderId = order.OrderId;
+                await orderDetailRepository.InsertAsync(connection, orderDetail, uow.Transaction);
+            }
+
+            await uow.CommitAsync();
+        }
+        catch
+        {
+            await uow.RollbackAsync();
+        }
+
+        return results;
+    }
+
+    public bool InsertOrderDoWorkMethod(Order order)
+    {
+        if (order is null || order.OrderDetails is null || order.OrderDetails.Count == 0)
+            return false;
+
+        bool results = false;
+
+        using var connection = new SqlConnection(ConnectionString);
+        using var uow = new UnitOfWork(connection);
+
+        results = uow.DoWork<Order>(DoWorkInsertOrder, order);
+
+        return results;
+    }
+
+    public async Task<bool> InsertOrderDoWorkMethodAsync(Order order)
+    {
+        if (order is null || order.OrderDetails is null || order.OrderDetails.Count == 0)
+            return false;
+
+        bool results = false;
+
+        using var connection = new SqlConnection(ConnectionString);
+        using var uow = new UnitOfWork(connection);
+
+        results = await uow.DoWorkAsync<Order>(DoWorkInsertOrderAsync, order);
+
+        return results;
+    }
+
+    public bool DoWorkInsertOrder(IUnitOfWork uow, Order order)
+    {
+        var orderRepository = OrderRepository();
+        order.OrderId = orderRepository.Insert(uow.Connection, order, uow.Transaction);
+
+        var orderDetailRepository = OrderDetailRepository();
+        foreach (var orderDetail in order.OrderDetails)
+        {
+            orderDetail.OrderId = order.OrderId;
+            orderDetailRepository.Insert(uow.Connection, orderDetail, uow.Transaction);
+        }
+
+        return true;
+    }
+
+    public async Task<bool> DoWorkInsertOrderAsync(IUnitOfWork uow, Order order)
+    {
+        var orderRepository = OrderRepository();
+        order.OrderId = await orderRepository.InsertAsync(uow.Connection, order, uow.Transaction);
+
+        var orderDetailRepository = OrderDetailRepository();
+        foreach (var orderDetail in order.OrderDetails)
+        {
+            orderDetail.OrderId = order.OrderId;
+            await orderDetailRepository.InsertAsync(uow.Connection, orderDetail, uow.Transaction);
+        }
+
+        return true;
+    }
+    #endregion
 }

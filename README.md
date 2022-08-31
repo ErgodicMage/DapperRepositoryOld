@@ -79,5 +79,5 @@ DapperDAL automatcally generates the proper SQL to match the POCO.
 - Improve DapperDALSettings
 - Add Guid primary keys
 - ~~Add Generic Repository Pattern~~
-- Add Unit of Work Pattern
+- ~~Add Unit of Work Pattern~~
 - Add automatically join queries and results
