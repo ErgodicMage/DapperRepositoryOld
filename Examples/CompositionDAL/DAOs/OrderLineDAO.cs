@@ -4,13 +4,21 @@ public class OrderLineDAO
 {
     #region Constructor
     private readonly string _connectionStringName;
+    public readonly DapperDALSettings _settings;
 
     public OrderLineDAO(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
+        _settings = DapperDALSettings.DefaultSettings;
     }
 
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
+    public OrderLineDAO(DapperDALSettings settings, string connectionStringName)
+    {
+        _settings = settings;
+        _connectionStringName = connectionStringName;
+    }
+
+    private string? ConnectionString => _settings.ConnectionString(_connectionStringName);
     #endregion
 
     #region Get

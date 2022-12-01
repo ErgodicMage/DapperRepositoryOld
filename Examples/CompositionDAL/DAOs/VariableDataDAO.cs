@@ -4,13 +4,21 @@ public class VariableDataDAO
 {
     #region Constructor
     private readonly string _connectionStringName;
+    public readonly DapperDALSettings _settings;
 
     public VariableDataDAO(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
+        _settings = DapperDALSettings.DefaultSettings;
     }
 
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
+    public VariableDataDAO(DapperDALSettings settings, string connectionStringName)
+    {
+        _settings = settings;
+        _connectionStringName = connectionStringName;
+    }
+
+    private string? ConnectionString => _settings.ConnectionString(_connectionStringName);
     #endregion
 
     #region Get
@@ -45,13 +53,13 @@ public class VariableDataDAO
     public int UpdateBillofMaterial(int jobId, string billofMaterial)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.Update<VariableData>(new { JobId = jobId }, new { BillofMaterial = billofMaterial });
+        return connection.Update<VariableData, int>(jobId, new { BillofMaterial = billofMaterial });
     }
 
     public async Task<int> UpdateBillofMaterialAsync(int jobId, string billofMaterial)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.UpdateAsync<VariableData>(new { JobId = jobId }, new { BillofMaterial = billofMaterial });
+        return await connection.UpdateAsync<VariableData, int>(jobId, new { BillofMaterial = billofMaterial });
     }
     #endregion
 
