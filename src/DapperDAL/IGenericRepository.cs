@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace DapperDAL;
+﻿namespace DapperDAL;
 
 public interface IGenericRepository<T, Key> where T : class
 {

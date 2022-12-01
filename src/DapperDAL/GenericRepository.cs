@@ -2,7 +2,19 @@
 
 public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> where T : class
 {
+    #region Constructors
+    private readonly DapperDALSettings _settings;
+
+    protected GenericRepository() => _settings = DapperDALSettings.DefaultSettings;
+
+    protected GenericRepository(DapperDALSettings settings) => _settings = settings;
+    #endregion
+
+    #region Connection
     protected abstract IDbConnection GetConnection();
+
+    protected string? GetConnectionString(string connectionStringName = "Default") => _settings.ConnectionString(connectionStringName);
+    #endregion
 
     #region Get
     public T Get(Key key, int? commandTimeout = null)

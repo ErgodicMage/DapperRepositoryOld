@@ -3,6 +3,15 @@
 public abstract class GenericLargePropertiesRepository<T, Key> : 
     GenericRepository<T, Key>, IGenericLargePropertiesRepository<T, Key> where T : class
 {
+    #region Constructors
+    private readonly DapperDALSettings _settings;
+
+    protected GenericLargePropertiesRepository() => _settings = DapperDALSettings.DefaultSettings;
+
+    protected GenericLargePropertiesRepository(DapperDALSettings settings) : base(settings) 
+    { }
+    #endregion
+
     #region Get
     public new T Get(Key key, int? commandTimeout = null)
     {
