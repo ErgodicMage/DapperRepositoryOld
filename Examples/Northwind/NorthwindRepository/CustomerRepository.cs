@@ -1,18 +1,12 @@
 ﻿namespace NorthwindRepository;
 
-public class CustomerRepository : GenericRepository<Customer, string>, ICustomerRepository
+public class CustomerRepository : NorthwindGenericRepository<Customer, string>, ICustomerRepository
 {
     #region Constructor
-    public CustomerRepository(string connectionStringName)
-    {
-        _connectionStringName = connectionStringName;
-    }
-    #endregion
+    public CustomerRepository(string connectionStringName) : base(connectionStringName)
+    { }
 
-    #region Connection
-    private readonly string _connectionStringName;
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
-
-    protected override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
+    public CustomerRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    { }
     #endregion
 }

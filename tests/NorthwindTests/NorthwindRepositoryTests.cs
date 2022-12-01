@@ -15,9 +15,11 @@ public class NorthwindRepositoryTests
         TestingUtilities.TestNamespace = "Northwind";
         TestingUtilities.LoadAppSettings();
 
-        DapperDALSettings.Initialize(TestingUtilities.Configuration);
+        DapperDALSettings settings = new DapperDALSettings();
+        settings.Initialize(TestingUtilities.Configuration);
+        DapperDALSettings.DefaultSettings = settings;
 
-        _context = new NorthwindDbContext(_connectionStringName);
+        _context = new NorthwindDbContext(settings, _connectionStringName);
     }
 
     [Fact]

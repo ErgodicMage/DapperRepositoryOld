@@ -1,19 +1,13 @@
 ﻿namespace NorthwindRepository;
 
-public class TerritoryRepository : GenericRepository<Territory, string>, ITerritoryRepository
+public class TerritoryRepository : NorthwindGenericRepository<Territory, string>, ITerritoryRepository
 {
     #region Constructor
-    public TerritoryRepository(string connectionStringName)
-    {
-        _connectionStringName = connectionStringName;
-    }
-    #endregion
+    public TerritoryRepository(string connectionStringName) : base(connectionStringName)
+    { }
 
-    #region Connection
-    private readonly string _connectionStringName;
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
-
-    protected override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
+    public TerritoryRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    { }
     #endregion
 
     #region Get

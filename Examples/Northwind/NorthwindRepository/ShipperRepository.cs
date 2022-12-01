@@ -1,18 +1,12 @@
 ﻿namespace NorthwindRepository;
 
-public class ShipperRepository : GenericRepository<Shipper, int>, IShipperRepository
+public class ShipperRepository : NorthwindGenericRepository<Shipper, int>, IShipperRepository
 {
     #region Constructor
-    public ShipperRepository(string connectionStringName)
-    {
-        _connectionStringName = connectionStringName;
-    }
-    #endregion
+    public ShipperRepository(string connectionStringName) : base(connectionStringName)
+    { }
 
-    #region Connection
-    private readonly string _connectionStringName;
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
-
-    protected override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
+    public ShipperRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    { }
     #endregion
 }

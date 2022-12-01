@@ -1,19 +1,13 @@
 ﻿namespace NorthwindRepository;
 
-public class CategoryRepository : GenericRepository<Category, int>, ICategoriesRepository
+public class CategoryRepository : NorthwindGenericRepository<Category, int>, ICategoriesRepository
 {
     #region Constructor
-    public CategoryRepository(string connectionStringName)
-    {
-        _connectionStringName = connectionStringName;
-    }
-    #endregion
+    public CategoryRepository(string connectionStringName) : base(connectionStringName)
+    { }
 
-    #region Connection
-    private readonly string _connectionStringName;
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
-
-    protected override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
+    public CategoryRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    { }
     #endregion
 
     public byte[]? GetImage(int id, int? commandTimeout = null)

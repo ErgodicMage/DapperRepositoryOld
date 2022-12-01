@@ -3,27 +3,36 @@
 public class NorthwindDbContext
 {
     #region Constructors
+    private readonly DapperDALSettings _settings;
+    private readonly string _connectionStringName;
+
     public NorthwindDbContext(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
+        _settings = DapperDALSettings.DefaultSettings;
     }
 
-    private readonly string _connectionStringName;
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
+    public NorthwindDbContext(DapperDALSettings settings, string connectionStringName)
+    {
+        _settings = settings;
+        _connectionStringName = connectionStringName;
+    }
+
+    private string? ConnectionString => _settings.ConnectionString(_connectionStringName);
     #endregion
 
     #region Repositories
-    public ICategoriesRepository CategoryRepository() => new CategoryRepository(_connectionStringName);
-    public ICustomerRepository CustomerRepository() => new CustomerRepository(_connectionStringName);
-    public IEmployeeRepository EmployeeRepository() => new EmployeeRepository(_connectionStringName);
-    public IEmployeeTerritoriesRepository EmployeeTerritoriesRepository() => new EmployeeTerritoriesRepository(_connectionStringName);
-    public ITerritoryRepository TerritoryRepository() => new TerritoryRepository(_connectionStringName);
-    public IOrderRepository OrderRepository() => new OrderRepository(_connectionStringName);
-    public IOrderDetailRepository OrderDetailRepository() => new OrderDetailRepository(_connectionStringName);
-    public IProductRepository ProductRepository() => new ProductRepository(_connectionStringName);
-    public ISupplierRepository SupplierRepository() => new SupplierRepository(_connectionStringName);
-    public IRegionRepository RegionRepository() => new RegionRepository(_connectionStringName);
-    public IShipperRepository ShipperRepository() => new ShipperRepository(_connectionStringName);
+    public ICategoriesRepository CategoryRepository() => new CategoryRepository(_settings, _connectionStringName);
+    public ICustomerRepository CustomerRepository() => new CustomerRepository(_settings, _connectionStringName);
+    public IEmployeeRepository EmployeeRepository() => new EmployeeRepository(_settings, _connectionStringName);
+    public IEmployeeTerritoriesRepository EmployeeTerritoriesRepository() => new EmployeeTerritoriesRepository(_settings, _connectionStringName);
+    public ITerritoryRepository TerritoryRepository() => new TerritoryRepository(_settings, _connectionStringName);
+    public IOrderRepository OrderRepository() => new OrderRepository(_settings, _connectionStringName);
+    public IOrderDetailRepository OrderDetailRepository() => new OrderDetailRepository(_settings, _connectionStringName);
+    public IProductRepository ProductRepository() => new ProductRepository(_settings, _connectionStringName);
+    public ISupplierRepository SupplierRepository() => new SupplierRepository(_settings, _connectionStringName);
+    public IRegionRepository RegionRepository() => new RegionRepository(_settings, _connectionStringName);
+    public IShipperRepository ShipperRepository() => new ShipperRepository(_settings, _connectionStringName);
     #endregion
 
     #region Category Functions
