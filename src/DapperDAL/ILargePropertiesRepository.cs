@@ -8,6 +8,8 @@ public interface ILargePropertiesRepository<T, Key> : IRepository<T, Key> where 
     new T Get(object whereConditions, int? commandTimeout = null);
     new IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     new IEnumerable<T> GetList(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
+    new IEnumerable<T> GetList(string whereConditions, object? orderBy = null, int? commandTimeout = null);
+    new IEnumerable<T> GetList(IDbConnection connection,string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
 
 
 
@@ -17,4 +19,7 @@ public interface ILargePropertiesRepository<T, Key> : IRepository<T, Key> where 
     new Task<T> GetAsync(object whereConditions, int? commandTimeout = null);
     new Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     new Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
+    new Task<IEnumerable<T>> GetListAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null);
+    new Task<IEnumerable<T>> GetListAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
+
 }

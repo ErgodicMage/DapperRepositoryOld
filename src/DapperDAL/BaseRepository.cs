@@ -44,6 +44,15 @@ public abstract class BaseRepository<T, Key> : IRepository<T, Key> where T : cla
     public IEnumerable<T> GetList(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetList<T>(whereConditions, orderBy, transaction, commandTimeout);
 
+    public IEnumerable<T> GetList(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return GetList(connection, whereConditions, orderBy, null, commandTimeout);
+    }
+
+    public IEnumerable<T> GetList(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetList<T>(whereConditions, orderBy, transaction, commandTimeout);
+
 
     public int Count(object? whereConditions = null, int? commandTimeout = null)
     {
@@ -78,6 +87,15 @@ public abstract class BaseRepository<T, Key> : IRepository<T, Key> where T : cla
     }
 
     public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetListAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
+
+    public async Task<IEnumerable<T>> GetListAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    {
+        using var connection = GetConnection();
+        return await GetListAsync(connection, whereConditions, orderBy, null, commandTimeout);
+    }
+
+    public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetListAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
 
     public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
