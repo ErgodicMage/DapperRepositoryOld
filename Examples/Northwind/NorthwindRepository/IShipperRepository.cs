@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface IShipperRepository : IGenericRepository<Shipper, int>
+public interface IShipperRepository : IRepository<Shipper, int>
 {
 }

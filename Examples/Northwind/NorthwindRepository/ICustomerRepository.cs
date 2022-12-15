@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface ICustomerRepository : IGenericRepository<Customer, string>
+public interface ICustomerRepository : IRepository<Customer, string>
 {
 }

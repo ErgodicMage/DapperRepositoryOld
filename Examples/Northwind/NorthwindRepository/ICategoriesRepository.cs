@@ -1,6 +1,6 @@
 ﻿namespace NorthwindRepository
 {
-    public interface ICategoriesRepository : IGenericRepository<Category, int>
+    public interface ICategoriesRepository : IRepository<Category, int>
     {
         byte[]? GetImage(IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null);
         byte[]? GetImage(int id, int? commandTimeout = null);

@@ -1,14 +1,14 @@
 ﻿namespace DapperDAL;
 
-public abstract class GenericLargePropertiesRepository<T, Key> : 
-    GenericRepository<T, Key>, IGenericLargePropertiesRepository<T, Key> where T : class
+public abstract class BaseLargePropertiesRepository<T, Key> : 
+    BaseRepository<T, Key>, ILargePropertiesRepository<T, Key> where T : class
 {
     #region Constructors
     private readonly DapperDALSettings _settings;
 
-    protected GenericLargePropertiesRepository() => _settings = DapperDALSettings.DefaultSettings;
+    protected BaseLargePropertiesRepository() => _settings = DapperDALSettings.DefaultSettings;
 
-    protected GenericLargePropertiesRepository(DapperDALSettings settings) : base(settings) 
+    protected BaseLargePropertiesRepository(DapperDALSettings settings) : base(settings) 
     { }
     #endregion
 

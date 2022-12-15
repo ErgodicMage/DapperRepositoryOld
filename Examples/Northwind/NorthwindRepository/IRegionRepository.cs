@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface IRegionRepository : IGenericRepository<Region, int>
+public interface IRegionRepository : IRepository<Region, int>
 {
 }

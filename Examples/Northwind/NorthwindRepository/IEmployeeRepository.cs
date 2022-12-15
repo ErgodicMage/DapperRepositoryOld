@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface IEmployeeRepository : IGenericRepository<Employee, int>
+public interface IEmployeeRepository : IRepository<Employee, int>
 {
 }

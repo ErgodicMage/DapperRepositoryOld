@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface ISupplierRepository : IGenericRepository<Supplier, int>
+public interface ISupplierRepository : IRepository<Supplier, int>
 {
 }

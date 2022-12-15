@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public interface IGenericLargePropertiesRepository<T, Key> : IGenericRepository<T, Key> where T : class
+public interface ILargePropertiesRepository<T, Key> : IRepository<T, Key> where T : class
 {
     new T Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);
     new T Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null);

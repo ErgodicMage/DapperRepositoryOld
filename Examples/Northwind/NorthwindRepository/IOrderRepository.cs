@@ -1,6 +1,6 @@
 ﻿namespace NorthwindRepository
 {
-    public interface IOrderRepository : IGenericRepository<Order, int>
+    public interface IOrderRepository : IRepository<Order, int>
     {
     }
 }

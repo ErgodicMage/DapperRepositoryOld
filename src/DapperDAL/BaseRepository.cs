@@ -1,13 +1,13 @@
 ﻿namespace DapperDAL;
 
-public abstract class GenericRepository<T, Key> : IGenericRepository<T, Key> where T : class
+public abstract class BaseRepository<T, Key> : IRepository<T, Key> where T : class
 {
     #region Constructors
     private readonly DapperDALSettings _settings;
 
-    protected GenericRepository() => _settings = DapperDALSettings.DefaultSettings;
+    protected BaseRepository() => _settings = DapperDALSettings.DefaultSettings;
 
-    protected GenericRepository(DapperDALSettings settings) => _settings = settings;
+    protected BaseRepository(DapperDALSettings settings) => _settings = settings;
     #endregion
 
     #region Connection

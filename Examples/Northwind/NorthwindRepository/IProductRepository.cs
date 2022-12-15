@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface IProductRepository : IGenericRepository<Product, int>
+public interface IProductRepository : IRepository<Product, int>
 {
 }

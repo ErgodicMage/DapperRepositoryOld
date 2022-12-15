@@ -1,6 +1,6 @@
 ﻿namespace NorthwindRepository;
 
-public interface ITerritoryRepository : IGenericRepository<Territory, string>
+public interface ITerritoryRepository : IRepository<Territory, string>
 {
     #region Get
     Territory GetByRegionId(int regionId, int? commandTimeout = null);

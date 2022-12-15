@@ -1,6 +1,6 @@
 ﻿namespace NorthwindRepository;
 
-public class NorthwindGenericRepository<T, Key> : GenericRepository<T, Key> where T : class
+public class NorthwindGenericRepository<T, Key> : BaseRepository<T, Key> where T : class
 {
     #region Constructors
     private readonly DapperDALSettings _settings;

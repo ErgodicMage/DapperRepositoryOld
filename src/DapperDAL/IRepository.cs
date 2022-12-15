@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public interface IGenericRepository<T, Key> where T : class
+public interface IRepository<T, Key> where T : class
 {
     #region Get
     T Get(Key key, int? commandTimeout = null);

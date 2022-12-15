@@ -1,5 +1,5 @@
 ﻿namespace NorthwindRepository;
 
-public interface IEmployeeTerritoriesRepository : IGenericRepository<EmployeeTerritories, int>
+public interface IEmployeeTerritoriesRepository : IRepository<EmployeeTerritories, int>
 {
 }
