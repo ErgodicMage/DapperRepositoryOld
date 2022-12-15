@@ -13,12 +13,12 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
-    public static Task<T> GetIdAsync<T>(this IDbConnection connection, object id, 
+    public static Task<T?> GetIdAsync<T>(this IDbConnection connection, object id, 
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
-        return connection.QueryFirstOrDefaultAsync<T>(sql, dynParameters, transaction, commandTimeout);
+        return connection.QueryFirstOrDefaultAsync<T?>(sql, dynParameters, transaction, commandTimeout);
     }
 
     /// <summary>
@@ -31,13 +31,13 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
-    public static Task<T> GetIdLargePropertiesAsync<T>(this IDbConnection connection, object id,
+    public static Task<T?> GetIdLargePropertiesAsync<T>(this IDbConnection connection, object id,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
         dynParameters = DynamicParametersHelper<T>.DynamicParametersFromGet(dynParameters);
-        return connection.QueryFirstOrDefaultAsync<T>(sql, dynParameters, transaction, commandTimeout);
+        return connection.QueryFirstOrDefaultAsync<T?>(sql, dynParameters, transaction, commandTimeout);
     }
 
     /// <summary>
@@ -49,11 +49,11 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
-    public static Task<T> GetAsync<T>(this IDbConnection connection, object whereConditions,
+    public static Task<T?> GetAsync<T>(this IDbConnection connection, object whereConditions,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);
-        return connection.QueryFirstOrDefaultAsync<T>(sql, whereConditions, transaction, commandTimeout);
+        return connection.QueryFirstOrDefaultAsync<T?>(sql, whereConditions, transaction, commandTimeout);
     }
 
     /// <summary>
@@ -65,13 +65,13 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
-    public static Task<T> GetLargePropertiesAsync<T>(this IDbConnection connection, object whereConditions,
+    public static Task<T?> GetLargePropertiesAsync<T>(this IDbConnection connection, object whereConditions,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);
         var parameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
         parameters = DynamicParametersHelper<T>.DynamicParametersFromGet(parameters);
-        return connection.QueryFirstOrDefaultAsync<T>(sql, parameters, transaction, commandTimeout);
+        return connection.QueryFirstOrDefaultAsync<T?>(sql, parameters, transaction, commandTimeout);
     }
 
     /// <summary>

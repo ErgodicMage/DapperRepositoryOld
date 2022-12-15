@@ -13,7 +13,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
-    public static T GetId<T>(this IDbConnection connection, object id, 
+    public static T? GetId<T>(this IDbConnection connection, object id, 
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
@@ -31,7 +31,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
-    public static T GetIdLargeProperties<T>(this IDbConnection connection, object id,
+    public static T? GetIdLargeProperties<T>(this IDbConnection connection, object id,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
@@ -49,7 +49,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
-    public static T Get<T>(this IDbConnection connection, object whereConditions,
+    public static T? Get<T>(this IDbConnection connection, object whereConditions,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);
@@ -65,7 +65,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
-    public static T GetLargeProperties<T>(this IDbConnection connection, object whereConditions,
+    public static T? GetLargeProperties<T>(this IDbConnection connection, object whereConditions,
         IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);

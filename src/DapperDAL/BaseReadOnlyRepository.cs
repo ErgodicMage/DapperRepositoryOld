@@ -17,22 +17,22 @@ public abstract class BaseReadOnlyRepository<T, Key> : IReadOnlyRepository<T, Ke
     #endregion
 
     #region Get
-    public T Get(Key key, int? commandTimeout = null)
+    public T? Get(Key key, int? commandTimeout = null)
     {
         using var connection = GetConnection();
         return Get(connection, key, null, commandTimeout);
     }
 
-    public T Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public T? Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetId<T>(key, transaction, commandTimeout);
 
-    public T Get(object whereConditions, int? commandTimeout = null)
+    public T? Get(object whereConditions, int? commandTimeout = null)
     {
         using var connection = GetConnection();
         return Get(connection, whereConditions, null, commandTimeout);
     }
 
-    public T Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public T? Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Get<T>(whereConditions, transaction, commandTimeout);
 
     public IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
@@ -62,22 +62,22 @@ public abstract class BaseReadOnlyRepository<T, Key> : IReadOnlyRepository<T, Ke
     public int Count(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Count<T>(whereConditions, transaction, commandTimeout);
 
-    public async Task<T> GetAsync(Key key, int? commandTimeout = null)
+    public async Task<T?> GetAsync(Key key, int? commandTimeout = null)
     {
         using var connection = GetConnection();
         return await GetAsync(connection, key, null, commandTimeout);
     }
 
-    public Task<T> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public Task<T?> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetIdAsync<T>(key, transaction, commandTimeout);
 
-    public Task<T> GetAsync(object whereConditions, int? commandTimeout = null)
+    public Task<T?> GetAsync(object whereConditions, int? commandTimeout = null)
     {
         using var connection = GetConnection();
         return GetAsync(connection, whereConditions, null, commandTimeout);
     }
 
-    public Task<T> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
+    public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetAsync<T>(whereConditions, transaction, commandTimeout);
 
     public async Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
