@@ -4,9 +4,8 @@ public abstract class BaseLargePropertiesRepository<T, Key> :
     BaseRepository<T, Key>, ILargePropertiesRepository<T, Key> where T : class
 {
     #region Constructors
-    private readonly DapperDALSettings _settings;
-
-    protected BaseLargePropertiesRepository() => _settings = DapperDALSettings.DefaultSettings;
+    protected BaseLargePropertiesRepository()
+    { }
 
     protected BaseLargePropertiesRepository(DapperDALSettings settings) : base(settings) 
     { }
