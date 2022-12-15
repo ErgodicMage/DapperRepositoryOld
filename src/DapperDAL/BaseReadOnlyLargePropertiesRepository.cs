@@ -1,15 +1,19 @@
 ﻿namespace DapperDAL;
 
-public abstract class BaseReadOnlyLargePropertiesRepository<T, Key> :
-    BaseRepository<T, Key>, IReadOnlyLargePropertiesRepository<T, Key> where T : class
+public abstract class BaseReadOnlyLargePropertiesRepository<T, Key> : IReadOnlyLargePropertiesRepository<T, Key> where T : class
 {
     #region Constructors
     private readonly DapperDALSettings _settings;
 
     protected BaseReadOnlyLargePropertiesRepository() => _settings = DapperDALSettings.DefaultSettings;
 
-    protected BaseReadOnlyLargePropertiesRepository(DapperDALSettings settings) : base(settings)
-    { }
+    protected BaseReadOnlyLargePropertiesRepository(DapperDALSettings settings) => _settings = settings;
+    #endregion
+
+    #region Connection
+    protected abstract IDbConnection GetConnection();
+
+    protected string? GetConnectionString(string connectionStringName = "Default") => _settings.ConnectionString(connectionStringName);
     #endregion
 
     #region Get

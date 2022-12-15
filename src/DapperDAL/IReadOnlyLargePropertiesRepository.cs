@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public interface IReadOnlyLargePropertiesRepository<T, Key> : IReadOnlyRepository<T, Key> where T : class
+public interface IReadOnlyLargePropertiesRepository<T, Key> where T : class
 {
     new T? Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);
     new T? Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null);
