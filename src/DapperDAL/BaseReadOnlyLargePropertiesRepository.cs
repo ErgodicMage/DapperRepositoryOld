@@ -35,23 +35,23 @@ public abstract class BaseReadOnlyLargePropertiesRepository<T, Key> : IReadOnlyL
     public T? Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetLargeProperties<T>(whereConditions, transaction, commandTimeout);
 
-    public IEnumerable<T> GetList(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
+    public IEnumerable<T> GetWhere(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetList(connection, whereConditions, orderBy, null, commandTimeout);
+        return GetWhere(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public IEnumerable<T> GetList(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetListLargeProperties<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public IEnumerable<T> GetWhere(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereLargeProperties<T>(whereConditions, orderBy, transaction, commandTimeout);
 
-    public IEnumerable<T> GetList(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public IEnumerable<T> GetWhere(string whereConditions, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetList(connection, whereConditions, orderBy, null, commandTimeout);
+        return GetWhere(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public IEnumerable<T> GetList(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetListLargeProperties<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public IEnumerable<T> GetWhere(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereLargeProperties<T>(whereConditions, orderBy, transaction, commandTimeout);
 
 
     public async Task<T?> GetAsync(Key key, int? commandTimeout = null)
@@ -72,22 +72,22 @@ public abstract class BaseReadOnlyLargePropertiesRepository<T, Key> : IReadOnlyL
     public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetLargePropertiesAsync<T>(whereConditions, transaction, commandTimeout);
 
-    public async Task<IEnumerable<T>> GetListAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetWhereAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return await GetListAsync(connection, whereConditions, orderBy, null, commandTimeout);
+        return await GetWhereAsync(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetListLargePropertiesAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
 
-    public async Task<IEnumerable<T>> GetListAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetWhereAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return await GetListAsync(connection, whereConditions, orderBy, null, commandTimeout);
+        return await GetWhereAsync(connection, whereConditions, orderBy, null, commandTimeout);
     }
 
-    public Task<IEnumerable<T>> GetListAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetListLargePropertiesAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
     #endregion
 }

@@ -115,7 +115,7 @@ public class CategoryRepositoryTests
     public void GetAllCategtories()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = categoryRepository.GetList();
+        var categories = categoryRepository.GetWhere();
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());
     }
@@ -125,7 +125,7 @@ public class CategoryRepositoryTests
     public async Task GetAllCategtoriesAsync()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = await categoryRepository.GetListAsync();
+        var categories = await categoryRepository.GetWhereAsync();
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());
     }
@@ -135,7 +135,7 @@ public class CategoryRepositoryTests
     public void GetAllCategoriesSortedByCategoryNameDesc()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = categoryRepository.GetList( orderBy : new {CategoryName = false});
+        var categories = categoryRepository.GetWhere( orderBy : new {CategoryName = false});
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());
 
@@ -148,7 +148,7 @@ public class CategoryRepositoryTests
     public async Task GetAllCategoriesSortedByCategoryNameDescAsync()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = await categoryRepository.GetListAsync(orderBy: new { CategoryName = false });
+        var categories = await categoryRepository.GetWhereAsync(orderBy: new { CategoryName = false });
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());
 
@@ -162,7 +162,7 @@ public class CategoryRepositoryTests
     public void GetCategoryByName(string categoryName)
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = categoryRepository.GetList(new {CategoryName = categoryName});
+        var categories = categoryRepository.GetWhere(new {CategoryName = categoryName});
         Assert.NotNull(categories);
         Assert.Single(categories);
         Assert.Equal(categoryName, categories.First().CategoryName);
@@ -174,7 +174,7 @@ public class CategoryRepositoryTests
     public async Task GetCategoryByNameAsync(string categoryName)
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
-        var categories = await categoryRepository.GetListAsync(new { CategoryName = categoryName });
+        var categories = await categoryRepository.GetWhereAsync(new { CategoryName = categoryName });
         Assert.NotNull(categories);
         Assert.Single(categories);
         Assert.Equal(categoryName, categories.First().CategoryName);

@@ -49,51 +49,51 @@ public class JobsDAO
     public IEnumerable<Job> GetByStatus(string status)
     {
         using var connetion = new SqlConnection(ConnectionString);
-        return connetion.GetList<Job>(new { Status = status });
+        return connetion.GetWhere<Job>(new { Status = status });
     }
 
     public async Task<IEnumerable<Job>> GetByStatusAsync(string status)
     {
         using var connetion = new SqlConnection(ConnectionString);
-        return await connetion.GetListAsync<Job>(new { Status = status });
+        return await connetion.GetWhereAsync<Job>(new { Status = status });
     }
 
     public IEnumerable<Job> GetByWorkflow(string workflow)
     {
         using var connetion = new SqlConnection(ConnectionString);
-        return connetion.GetList<Job>(new { Workflow = workflow }, new {Workflow = true, JobId = false});
+        return connetion.GetWhere<Job>(new { Workflow = workflow }, new {Workflow = true, JobId = false});
     }
 
     public async Task<IEnumerable<Job>> GetByWorkflowAsync(string workflow)
     {
         using var connetion = new SqlConnection(ConnectionString);
-        return await connetion.GetListAsync<Job>(new { Workflow = workflow }, new { Workflow = true, JobId = false });
+        return await connetion.GetWhereAsync<Job>(new { Workflow = workflow }, new { Workflow = true, JobId = false });
     }
 
     public IEnumerable<Job> GetByStatusQueues(string status, IList<string> queues)
     {
         string whereCondition = "JOBSTATUS=@status AND REQQUEUE IN @queues";
         using var connection = new SqlConnection(ConnectionString);
-        return connection.GetList<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
+        return connection.GetWhere<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
     }
 
     public async Task<IEnumerable<Job>> GetByStatusQueuesAsync(string status, IList<string> queues)
     {
         string whereCondition = "JOBSTATUS=@status AND REQQUEUE IN @queues";
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.GetListAsync<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
+        return await connection.GetWhereAsync<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
     }
 
     public IEnumerable<Job> GetWhere(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.GetList<Job>(whereCondition, parameters, orderBy);
+        return connection.GetWhere<Job>(whereCondition, parameters, orderBy);
     }
 
     public async Task<IEnumerable<Job>> GetWhereAsync(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.GetListAsync<Job>(whereCondition, parameters, orderBy);
+        return await connection.GetWhereAsync<Job>(whereCondition, parameters, orderBy);
     }
     #endregion
 

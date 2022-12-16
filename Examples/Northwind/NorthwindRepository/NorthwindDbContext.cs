@@ -47,7 +47,7 @@ public class NorthwindDbContext
     public IEnumerable<Category> GetCategoryListWithImage(object whereConditions)
     {
         var categoryRepository = CategoryRepository();
-        var categories = categoryRepository.GetList(whereConditions);
+        var categories = categoryRepository.GetWhere(whereConditions);
         foreach (var category in categories)
         {
             category.Image = categoryRepository.GetImage(category.CategoryId);
@@ -66,7 +66,7 @@ public class NorthwindDbContext
     public async Task<IEnumerable<Category>> GetCategoryListWithImageAsync(object whereConditions)
     {
         var categoryRepository = CategoryRepository();
-        var categories = await categoryRepository.GetListAsync(whereConditions);
+        var categories = await categoryRepository.GetWhereAsync(whereConditions);
         foreach (var category in categories)
         {
             category.Image = await categoryRepository.GetImageAsync(category.CategoryId);
@@ -84,12 +84,12 @@ public class NorthwindDbContext
             return null;
 
         var employeeTerritoriesRepository = EmployeeTerritoriesRepository();
-        var employeeTerritories = employeeTerritoriesRepository.GetList(new { EmployeeId = employeeId });
+        var employeeTerritories = employeeTerritoriesRepository.GetWhere(new { EmployeeId = employeeId });
 
         var territoryIds = employeeTerritories.Select(t => t.TerritoryId).ToList();
 
         var territoryRepository = TerritoryRepository();
-        employee.Territories = territoryRepository.GetList( new {TerritoryId = territoryIds}).ToList();
+        employee.Territories = territoryRepository.GetWhere( new {TerritoryId = territoryIds}).ToList();
 
         //var territoryRepository = TerritoryRepository();
         //employee.Territories = new List<Territory>();
@@ -111,12 +111,12 @@ public class NorthwindDbContext
             return null;
 
         var employeeTerritoriesRepository = EmployeeTerritoriesRepository();
-        var employeeTerritories = await employeeTerritoriesRepository.GetListAsync(new { EmployeeId = employeeId });
+        var employeeTerritories = await employeeTerritoriesRepository.GetWhereAsync(new { EmployeeId = employeeId });
 
         var territoryIds = employeeTerritories.Select(t => t.TerritoryId).ToList();
 
         var territoryRepository = TerritoryRepository();
-        var territories = await territoryRepository.GetListAsync(new { TerritoryId = territoryIds });
+        var territories = await territoryRepository.GetWhereAsync(new { TerritoryId = territoryIds });
         employee.Territories = territories.ToList();
 
         return employee;
@@ -269,7 +269,7 @@ public class NorthwindDbContext
     public IEnumerable<OrderDetail> GetCompleteOrderDetailsOld(int orderId)
     {
         var orderDetailRepository = OrderDetailRepository();
-        var orderDetails = orderDetailRepository.GetList(new { OrderId = orderId });
+        var orderDetails = orderDetailRepository.GetWhere(new { OrderId = orderId });
 
         foreach (var orderDetail in orderDetails)
             orderDetail.Product = GetCompleteProduct(orderDetail.ProductId);

@@ -37,13 +37,13 @@ public class JobRunDAO
     public IEnumerable<JobRun> GetByJobId(int jobId)
     {
         var connection = new SqlConnection(ConnectionString);
-        return connection.GetList<JobRun>(new {JobId = jobId});
+        return connection.GetWhere<JobRun>(new {JobId = jobId});
     }
 
     public async Task<IEnumerable<JobRun>> GetByJobIdAsync(int jobId)
     {
         var connection = new SqlConnection(ConnectionString);
-        return await connection.GetListAsync<JobRun>(new { JobId = jobId });
+        return await connection.GetWhereAsync<JobRun>(new { JobId = jobId });
     }
 
     public JobRun GetServerJobRun(string serverCode)
@@ -82,19 +82,19 @@ public class JobRunDAO
     {
         var where = new { ServerCode = server, JobStatus = JobRun.JobRunStatus.New };
         using var connection = new SqlConnection(ConnectionString);
-        return connection.GetList<JobRun>(where, new { JobDate = false });
+        return connection.GetWhere<JobRun>(where, new { JobDate = false });
     }
 
     public IEnumerable<JobRun> GetNewJobsByQueue(string queue)
     {
         var connection = new SqlConnection(ConnectionString);
-        return connection.GetList<JobRun>(new { Status = JobRun.JobRunStatus.New, RequestQueue = queue });
+        return connection.GetWhere<JobRun>(new { Status = JobRun.JobRunStatus.New, RequestQueue = queue });
     }
 
     public async Task<IEnumerable<JobRun>> GetNewJobsByQueueAsync(string queue)
     {
         var connection = new SqlConnection(ConnectionString);
-        return await connection.GetListAsync<JobRun>(new { Status = JobRun.JobRunStatus.New, RequestQueue = queue });
+        return await connection.GetWhereAsync<JobRun>(new { Status = JobRun.JobRunStatus.New, RequestQueue = queue });
     }
     #endregion
 
