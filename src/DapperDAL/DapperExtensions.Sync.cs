@@ -104,7 +104,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
-    public static IEnumerable<T> GetWhere<T>(this IDbConnection connection, string whereConditions, object? parameters = null,
+    public static IEnumerable<T> GetWhereStatement<T>(this IDbConnection connection, string whereConditions, object? parameters = null,
         object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
@@ -143,7 +143,7 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
-    public static IEnumerable<T> GetWhereLargeProperties<T>(this IDbConnection connection, string whereConditions, object? parameters = null, 
+    public static IEnumerable<T> GetWhereStatementLargeProperties<T>(this IDbConnection connection, string whereConditions, object? parameters = null, 
         object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);

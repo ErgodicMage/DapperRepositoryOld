@@ -44,14 +44,14 @@ public abstract class BaseReadOnlyRepository<T, Key> : IReadOnlyRepository<T, Ke
     public IEnumerable<T> GetWhere(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetWhere<T>(whereConditions, orderBy, transaction, commandTimeout);
 
-    public IEnumerable<T> GetWhere(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public IEnumerable<T> GetWhereStatement(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetWhere(connection, whereConditions, orderBy, null, commandTimeout);
+        return GetWhereStatement(connection, whereConditions, parameters, orderBy, null, commandTimeout);
     }
 
-    public IEnumerable<T> GetWhere(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetWhere<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public IEnumerable<T> GetWhereStatement(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereStatement<T>(whereConditions, parameters, orderBy, transaction, commandTimeout);
 
 
     public int Count(object? whereConditions = null, int? commandTimeout = null)
@@ -89,14 +89,14 @@ public abstract class BaseReadOnlyRepository<T, Key> : IReadOnlyRepository<T, Ke
     public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.GetWhereAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
 
-    public async Task<IEnumerable<T>> GetWhereAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetWhereStatementAsync(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return await GetWhereAsync(connection, whereConditions, orderBy, null, commandTimeout);
+        return await GetWhereStatementAsync(connection, whereConditions, parameters, orderBy, null, commandTimeout);
     }
 
-    public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.GetWhereAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
+    public Task<IEnumerable<T>> GetWhereStatementAsync(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
+        => connection.GetWhereStatementAsync<T>(whereConditions, parameters, orderBy, transaction, commandTimeout);
 
     public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
     {

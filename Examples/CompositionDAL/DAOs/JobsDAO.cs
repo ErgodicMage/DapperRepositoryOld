@@ -74,26 +74,26 @@ public class JobsDAO
     {
         string whereCondition = "JOBSTATUS=@status AND REQQUEUE IN @queues";
         using var connection = new SqlConnection(ConnectionString);
-        return connection.GetWhere<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
+        return connection.GetWhereStatement<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
     }
 
     public async Task<IEnumerable<Job>> GetByStatusQueuesAsync(string status, IList<string> queues)
     {
         string whereCondition = "JOBSTATUS=@status AND REQQUEUE IN @queues";
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.GetWhereAsync<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
+        return await connection.GetWhereStatementAsync<Job>(whereCondition, new { status = status, queues = queues }, new { RequestQueue = false });
     }
 
-    public IEnumerable<Job> GetWhere(string whereCondition, object? parameters = null, object? orderBy = null)
+    public IEnumerable<Job> GetWhereStatement(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.GetWhere<Job>(whereCondition, parameters, orderBy);
+        return connection.GetWhereStatement<Job>(whereCondition, parameters, orderBy);
     }
 
-    public async Task<IEnumerable<Job>> GetWhereAsync(string whereCondition, object? parameters = null, object? orderBy = null)
+    public async Task<IEnumerable<Job>> GetWhereStatementAsync(string whereCondition, object? parameters = null, object? orderBy = null)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.GetWhereAsync<Job>(whereCondition, parameters, orderBy);
+        return await connection.GetWhereStatementAsync<Job>(whereCondition, parameters, orderBy);
     }
     #endregion
 

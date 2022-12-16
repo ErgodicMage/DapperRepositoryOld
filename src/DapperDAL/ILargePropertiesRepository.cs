@@ -8,8 +8,8 @@ public interface ILargePropertiesRepository<T, Key> : IRepository<T, Key> where 
     new T? Get(object whereConditions, int? commandTimeout = null);
     new IEnumerable<T> GetWhere(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     new IEnumerable<T> GetWhere(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
-    new IEnumerable<T> GetWhere(string whereConditions, object? orderBy = null, int? commandTimeout = null);
-    new IEnumerable<T> GetWhere(IDbConnection connection,string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
+    new IEnumerable<T> GetWhereStatement(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null);
+    new IEnumerable<T> GetWhereStatement(IDbConnection connection,string whereConditions, object parameters, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
 
 
 
@@ -19,7 +19,6 @@ public interface ILargePropertiesRepository<T, Key> : IRepository<T, Key> where 
     new Task<T?> GetAsync(object whereConditions, int? commandTimeout = null);
     new Task<IEnumerable<T>> GetWhereAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null);
     new Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
-    new Task<IEnumerable<T>> GetWhereAsync(string whereConditions, object? orderBy = null, int? commandTimeout = null);
-    new Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, string whereConditions, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
-
+    new Task<IEnumerable<T>> GetWhereStatementAsync(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null);
+    new Task<IEnumerable<T>> GetWhereStatementAsync(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null);
 }
