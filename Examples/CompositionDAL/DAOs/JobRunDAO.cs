@@ -102,7 +102,7 @@ public class JobRunDAO
     public int Insert(JobRun jobRun)
     {
         using var connection = new SqlConnection(ConnectionString);
-        int id = connection.Insert<JobRun>(jobRun);
+        int id = connection.Insert<JobRun, int>(jobRun);
         jobRun.JobRunId = id;
         return id;
     }
@@ -110,7 +110,7 @@ public class JobRunDAO
     public async Task<int> InsertAsync(JobRun jobRun)
     {
         using var connection = new SqlConnection(ConnectionString);
-        int id = await connection.InsertAsync<JobRun>(jobRun);
+        int id = await connection.InsertAsync<JobRun, int>(jobRun);
         jobRun.JobRunId = id;
         return id;
     }

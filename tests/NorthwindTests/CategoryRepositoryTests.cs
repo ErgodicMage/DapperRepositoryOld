@@ -191,4 +191,50 @@ public class CategoryRepositoryTests
         yield return new object[] { "Produce" };
         yield return new object[] { "Seafood" };
     }
+
+    [Fact]
+    [Trait("Category", TestCategories.IntegrationTest)]
+    public void InsertCategory()
+    {
+        var category = new Category()
+        {
+            CategoryName = "Soups",
+            Description = "Soups and Broths"
+        };
+
+        var categoryRepository = _context.CategoryRepository();
+        int id = categoryRepository.Insert(category);
+        Assert.True(id > 0);
+        Assert.Equal(id, category.CategoryId);
+
+        var getCategory = categoryRepository.Get(id);
+
+        Assert.NotNull(getCategory);
+        Assert.Equal(id, getCategory?.CategoryId);
+        Assert.Equal(category.CategoryName, getCategory?.CategoryName);
+        Assert.Equal(category.Description, getCategory?.Description);
+    }
+
+    [Fact]
+    [Trait("Category", TestCategories.IntegrationTest)]
+    public async Task InsertCategoryAsync()
+    {
+        var category = new Category()
+        {
+            CategoryName = "Soups",
+            Description = "Soups and Broths"
+        };
+
+        var categoryRepository = _context.CategoryRepository();
+        int id = await categoryRepository.InsertAsync(category);
+        Assert.True(id > 0);
+        Assert.Equal(id, category.CategoryId);
+
+        var getCategory = await categoryRepository.GetAsync(id);
+
+        Assert.NotNull(getCategory);
+        Assert.Equal(id, getCategory?.CategoryId);
+        Assert.Equal(category.CategoryName, getCategory?.CategoryName);
+        Assert.Equal(category.Description, getCategory?.Description);
+    }
 }

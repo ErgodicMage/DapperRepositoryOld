@@ -204,16 +204,38 @@ public static partial class DapperExtensions
     #endregion
 
     #region Insert Function
-    public static int Insert<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    private static void SetKey<T, Key>(T entity, Key key) where T : class
     {
-        string sql = BuilderCache<T>.InsertStatement; //InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalar<int>(sql, entity, transaction, commandTimeout);
+        PropertyInfo[] idProperties = BuilderCache<T>.IdProperties;
+        if (!idProperties.Any())
+            return;
+
+        try
+        {
+            // for now just grab the first property
+            PropertyInfo keyProperty = idProperties.First();
+            keyProperty.SetValue(entity, key, null);
+        }
+        catch
+        { 
+            // property set method is not supplied or can not be used
+        }
+    }
+
+    public static Key Insert<T, Key>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    {
+        string sql = BuilderCache<T>.InsertStatement;
+        Key key = connection.ExecuteScalar<Key>(sql, entity, transaction, commandTimeout);
+        SetKey<T, Key>(entity, key);
+        return key;
     }
 
     public static string InsertReturnString<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
-        string sql = BuilderCache<T>.InsertStatement; // InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalar<string>(sql, entity, transaction, commandTimeout);
+        string sql = BuilderCache<T>.InsertStatement;
+        string key = connection.ExecuteScalar<string>(sql, entity, transaction, commandTimeout);
+        if (!string.IsNullOrWhiteSpace(key)) SetKey<T, string>(entity, key);
+        return key;
     }
     #endregion
 

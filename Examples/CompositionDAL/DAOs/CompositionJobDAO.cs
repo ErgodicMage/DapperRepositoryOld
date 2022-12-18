@@ -39,13 +39,13 @@ public class CompositionJobDAO
     public int Insert(CompositionJob compJob)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.Insert<CompositionJob>(compJob);
+        return connection.Insert<CompositionJob, int>(compJob);
     }
 
     public async Task<int> InsertAsync(CompositionJob compJob)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.InsertAsync<CompositionJob>(compJob);
+        return await connection.InsertAsync<CompositionJob, int>(compJob);
     }
     #endregion
 

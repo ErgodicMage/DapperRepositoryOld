@@ -39,13 +39,13 @@ public class VariableDataDAO
     public int Insert(VariableData varData)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return connection.Insert<VariableData>(varData);
+        return connection.Insert<VariableData, int>(varData);
     }
 
     public async Task<int> InsertAsync(VariableData varData)
     {
         using var connection = new SqlConnection(ConnectionString);
-        return await connection.InsertAsync<VariableData>(varData);
+        return await connection.InsertAsync<VariableData, int>(varData);
     }
     #endregion
 

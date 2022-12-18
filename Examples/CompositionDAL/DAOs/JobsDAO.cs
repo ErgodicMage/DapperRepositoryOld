@@ -101,7 +101,7 @@ public class JobsDAO
     public int Insert(Job job)
     {
         using var connection = new SqlConnection(ConnectionString);
-        int id = connection.Insert<Job>(job);
+        int id = connection.Insert<Job, int>(job);
         job.JobId = id;
         return id;
     }
@@ -109,7 +109,7 @@ public class JobsDAO
     public async Task<int> InsertAsync(Job job)
     {
         using var connection = new SqlConnection(ConnectionString);
-        int id = await connection.InsertAsync<Job>(job);
+        int id = await connection.InsertAsync<Job, int>(job);
         job.JobId = id;
         return id;
     }

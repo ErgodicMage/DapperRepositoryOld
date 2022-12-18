@@ -119,10 +119,7 @@ public abstract class BaseRepository<T, Key> : IRepository<T, Key> where T : cla
     }
 
     public Key Insert(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-    {
-        string sql = BuilderCache<T>.InsertStatement; //InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalar<Key>(sql, entity, transaction, commandTimeout);
-    }
+        => connection.Insert<T, Key>(entity, transaction, commandTimeout);
 
     public async Task<Key> InsertAsync(T entity, int? commandTimeout = null)
     {
@@ -131,10 +128,7 @@ public abstract class BaseRepository<T, Key> : IRepository<T, Key> where T : cla
     }
 
     public Task<Key> InsertAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-    {
-        string sql = BuilderCache<T>.InsertStatement; //InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalarAsync<Key>(sql, entity, transaction, commandTimeout);
-    }
+        => connection.InsertAsync<T, Key>(entity, transaction, commandTimeout);
     #endregion
 
     #region Update

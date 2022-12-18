@@ -203,16 +203,20 @@ public static partial class DapperExtensions
     #endregion
 
     #region Insert function
-    public static Task<int> InsertAsync<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public async static Task<Key> InsertAsync<T, Key>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalarAsync<int>(sql, entity, transaction, commandTimeout);
+        Key key = await connection.ExecuteScalarAsync<Key>(sql, entity, transaction, commandTimeout);
+        SetKey<T, Key>(entity, key);
+        return key;
     }
 
-    public static Task<string> InsertReturnStringAsync<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public async static Task<string> InsertReturnStringAsync<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
     {
         string sql = InsertBuilder<T>.BuildInsertStatement();
-        return connection.ExecuteScalarAsync<string>(sql, entity, transaction, commandTimeout);
+        string key = await connection.ExecuteScalarAsync<string>(sql, entity, transaction, commandTimeout);
+        if (!string.IsNullOrWhiteSpace(key)) SetKey<T, string>(entity, key);
+        return key;
     }
     #endregion
 

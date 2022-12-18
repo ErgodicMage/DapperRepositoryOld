@@ -39,13 +39,13 @@ public class OrderLineDAO
     public int Insert(OrderLine orderLine)
     {
         var connection = new SqlConnection(ConnectionString);
-        return connection.Insert<OrderLine>(orderLine);
+        return connection.Insert<OrderLine, int>(orderLine);
     }
 
     public async Task<int> InsertAsync(OrderLine orderLine)
     {
         var connection = new SqlConnection(ConnectionString);
-        return await connection.InsertAsync<OrderLine>(orderLine);
+        return await connection.InsertAsync<OrderLine, int>(orderLine);
     }
     #endregion
 

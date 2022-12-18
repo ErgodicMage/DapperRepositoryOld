@@ -1,6 +1,6 @@
 ﻿namespace NorthwindModel;
 
-[Table("Categories", alias: "category")]
+[Table("Categories")]
 public class Category
 {
     [Key]
