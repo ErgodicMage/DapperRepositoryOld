@@ -5,7 +5,7 @@
 /// The specific property (such as SelectColumn) is built the first time it is reference and all other references.
 /// </summary>
 /// <typeparam name="T">The Entity type</typeparam>
-public class BuilderCache<T> where T : class
+public static class BuilderCache<T> where T : class
 {
     #region Cached Properties
     public static string SelectColumns => GetorSet("SelectColumns", SelectBuilder<T>.BuildSelectColumns);
@@ -16,11 +16,15 @@ public class BuilderCache<T> where T : class
 
     public static string InsertStatement => GetorSet("Insert", InsertBuilder<T>.BuildInsertStatement);
 
-    public static PropertyInfo[] Properties => GetorSet("Properties", typeof(T).GetProperties().ToArray);
+#pragma warning disable S2743 // Static fields should not be used in generic types
+    public static PropertyInfo[] Properties => GetorSet("Properties", GetProperties);
 
-    public static PropertyInfo[] IdProperties => GetorSet("IdProperties", PropertiesHelper.GetIdProperties(typeof(T)).ToArray);
+    public static PropertyInfo[] IdProperties => GetorSet("IdProperties", GetIdProperties);
+#pragma warning restore S2743 // Static fields should not be used in generic types
 
-    public static PropertyInfo[] ScaffoldProperties => GetorSet("ScaffoldProperties", PropertiesHelper.GetScaffoldableProperties<T>().ToArray);
+    public static PropertyInfo[] ScaffoldProperties => GetorSet("ScaffoldProperties", PropertiesHelper.GetScaffoldableProperties<T>);
+
+    public static PropertyInfo[] LargeProperties => GetorSet("LargeProperties", PropertiesHelper.GetLargeProperties<T>);
     #endregion
 
     #region Cache Operations
@@ -28,6 +32,12 @@ public class BuilderCache<T> where T : class
 
     private static TValue GetorSet<TValue>(string key, Func<TValue> create) =>
         DapperDALCache.GetorSet<TValue>(KeyName(key), create);
+
+    private static PropertyInfo[] GetProperties()
+        => typeof(T).GetProperties();
+
+    private static PropertyInfo[] GetIdProperties()
+        => PropertiesHelper.GetIdProperties(typeof(T));
 
     #endregion
 }
