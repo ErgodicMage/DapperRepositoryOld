@@ -7,7 +7,7 @@ public static class DynamicParametersHelper<T> where T : class
         if (parameters is null)
             return null;
 
-        DynamicParameters returnParameters = new DynamicParameters();
+        var returnParameters = (parameters is DynamicParameters) ? new DynamicParameters(parameters) : new DynamicParameters();
 
         foreach (var property in parameters.GetType().GetProperties())
         {
@@ -25,7 +25,13 @@ public static class DynamicParametersHelper<T> where T : class
     {
         DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
 
-        foreach(var property in setParameters?.GetType().GetProperties())
+        if (setParameters is DynamicParameters)
+        {
+            returnParameters.AddDynamicParams(setParameters);
+            return returnParameters;
+        }
+
+        foreach (var property in setParameters?.GetType().GetProperties())
         {
             if (whereParameters is not null && whereParameters.ParameterNames.Contains(property.Name))
                 continue;
@@ -79,12 +85,12 @@ public static class DynamicParametersHelper<T> where T : class
             var attributes = property.GetCustomAttributes(true);
 
             // if we have where parameters ignore [Key] types since they will already be included
-            if (whereParameters is not null && attributes.Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) || 
+            if (whereParameters is not null && attributes.Any(attr => (attr.GetType().Name == typeof(KeyAttribute).Name) ||
                                                                   (attr.GetType().Name == typeof(NonAutoKeyAttribute).Name)))
                 continue;
 
             // don't include [IgnoreSelect] or [NotMapped]
-            if (attributes.Any(attr => 
+            if (attributes.Any(attr =>
                                 attr.GetType().Name == typeof(IgnoreSelectAttribute).Name ||
                                 attr.GetType().Name == typeof(NotMappedAttribute).Name))
                 continue;
@@ -100,7 +106,7 @@ public static class DynamicParametersHelper<T> where T : class
             if (stringLength == 0)
                 returnParameters.Add(name, null);
             else
-                returnParameters.Add(name,null, null, ParameterDirection.Output, stringLength);
+                returnParameters.Add(name, null, null, ParameterDirection.Output, stringLength);
         }
 
         return returnParameters;
