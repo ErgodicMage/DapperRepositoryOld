@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public abstract class BaseRepository<T, Key> : BaseReadOnlyRepository<T, Key>, IRepository<T, Key> where T : class
+public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepository<T, Key> where T : class
 {
     #region Constructors
     protected BaseRepository() : base()

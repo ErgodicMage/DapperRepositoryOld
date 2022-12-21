@@ -1,18 +1,18 @@
 ﻿namespace DapperDAL;
 
-public abstract class BaseReadOnlyRepository<T, Key> : IReadOnlyRepository<T, Key> where T : class
+public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where T : class
 {
     #region Constructors
     private readonly DapperDALSettings _settings;
     private readonly bool _hasLargeProperties;
 
-    protected BaseReadOnlyRepository()
+    protected BaseReadRepository()
     {
         _settings = DapperDALSettings.DefaultSettings;
         _hasLargeProperties = BuilderCache<T>.LargeProperties.Length > 0;
     }
 
-    protected BaseReadOnlyRepository(DapperDALSettings settings)
+    protected BaseReadRepository(DapperDALSettings settings)
     {
         _settings = settings;
         _hasLargeProperties = BuilderCache<T>.LargeProperties.Length > 0;

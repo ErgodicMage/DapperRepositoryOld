@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public interface IReadOnlyRepository<T, Key> where T : class
+public interface IReadRepository<T, Key> where T : class
 {
     T? Get(Key key, int? commandTimeout = null);
     T? Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);

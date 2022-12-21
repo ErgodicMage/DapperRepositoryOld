@@ -1,6 +1,6 @@
 ﻿namespace DapperDAL;
 
-public interface IRepository<T, Key> : IReadOnlyRepository<T, Key> where T : class
+public interface IRepository<T, Key> : IReadRepository<T, Key> where T : class
 {
     #region Insert
     Key Insert(T entity, int? commandTimeout = null);
