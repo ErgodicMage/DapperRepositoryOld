@@ -13,6 +13,7 @@ public static class WhereBuilder<T> where T : class
             attr.GetType().Name == typeof(TableAttribute).Name) as dynamic;
         string? alias = tableattr?.Alias;
 
+        var scaffoldProperties = BuilderCache<T>.ScaffoldProperties;
         bool first = true;
 
         foreach (var property in whereProperties)
@@ -20,7 +21,7 @@ public static class WhereBuilder<T> where T : class
             var useProperty = property;
             bool useIsNull = false;
 
-            foreach(var sourceProperty in BuilderCache<T>.ScaffoldProperties)
+            foreach(var sourceProperty in scaffoldProperties)
             {
                 if (sourceProperty.Name == useProperty.Name)
                 {
@@ -56,12 +57,13 @@ public static class WhereBuilder<T> where T : class
 
     public static DynamicParameters GetIdParameters(object id)
     {
+        var idProperties = BuilderCache<T>.IdProperties;
         var dynamicParameters = new DynamicParameters();
-        if (BuilderCache<T>.IdProperties.Length == 1)
-            dynamicParameters.Add("@" + BuilderCache<T>.IdProperties.First().Name, id);
+        if (idProperties.Length == 1)
+            dynamicParameters.Add("@" + idProperties.First().Name, id);
         else
         {
-            foreach (var prop in BuilderCache<T>.IdProperties)
+            foreach (var prop in idProperties)
                 dynamicParameters.Add("@" + prop.Name, id?.GetType()?.GetProperty(prop.Name)?.GetValue(id, null));
         }
         return dynamicParameters;
