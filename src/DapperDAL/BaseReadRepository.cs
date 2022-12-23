@@ -87,10 +87,10 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
         => !_hasLargeProperties ? connection.GetIdAsync<T>(key, transaction, commandTimeout) :
                                  connection.GetIdLargePropertiesAsync<T>(key, transaction, commandTimeout);
 
-    public Task<T?> GetAsync(object whereConditions, int? commandTimeout = null)
+    public async Task<T?> GetAsync(object whereConditions, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return GetAsync(connection, whereConditions, null, commandTimeout);
+        return await GetAsync(connection, whereConditions, null, commandTimeout);
     }
 
     public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
