@@ -7,8 +7,10 @@ public static class DynamicParametersHelper<T> where T : class
         if (parameters is null)
             return null;
 
-        var returnParameters = (parameters is DynamicParameters) ? new DynamicParameters(parameters) : new DynamicParameters();
+        if (parameters is DynamicParameters)
+            return new DynamicParameters(parameters);
 
+        var returnParameters = new DynamicParameters();
         foreach (var property in parameters.GetType().GetProperties())
         {
             var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
@@ -21,9 +23,37 @@ public static class DynamicParametersHelper<T> where T : class
         return returnParameters;
     }
 
+
+    public static DynamicParameters? DynamicParametersFromWhere(DynamicParameters existingParameters, object? parameters)
+    {
+        if (parameters is null)
+            return new DynamicParameters(existingParameters);
+
+        var returnParameters = new DynamicParameters(existingParameters);
+
+        if (parameters is DynamicParameters)
+        {
+            returnParameters.AddDynamicParams(parameters);
+            return returnParameters;
+        }
+
+        foreach (var property in parameters.GetType().GetProperties())
+        {
+            var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name) ?? property;
+
+            object? v = property.GetValue(parameters, null);
+
+            if (returnParameters.ParameterNames is not null && returnParameters.ParameterNames.Contains(useProperty.Name))
+                continue;
+
+            returnParameters.Add($"@{useProperty.Name}", v);
+        }
+
+        return returnParameters;
+    }
     public static DynamicParameters DynamicParametersUpdate(object? setParameters, DynamicParameters? whereParameters = null)
     {
-        DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
+        DynamicParameters returnParameters = whereParameters is not null ? new DynamicParameters(whereParameters) : new DynamicParameters();
 
         if (setParameters is DynamicParameters)
         {
@@ -71,7 +101,7 @@ public static class DynamicParametersHelper<T> where T : class
     /// <returns>The parameters to use in a Get operation.</returns>
     public static DynamicParameters DynamicParametersFromGet(DynamicParameters? whereParameters = null)
     {
-        DynamicParameters returnParameters = whereParameters ?? new DynamicParameters();
+        DynamicParameters returnParameters = whereParameters is not null ? new DynamicParameters(whereParameters) : new DynamicParameters();
 
         foreach (var property in BuilderCache<T>.Properties)
         {
