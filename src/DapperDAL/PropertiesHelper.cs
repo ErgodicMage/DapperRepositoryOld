@@ -79,17 +79,6 @@ internal static class PropertiesHelper
     }
 
     public static bool IsReadOnly(PropertyInfo pi)
-    {
-        var attributes = pi?.GetCustomAttributes(false);
-        if (attributes?.Length > 0)
-        {
-            dynamic? write = attributes?.FirstOrDefault(x => x.GetType().Name == nameof(ReadOnlyAttribute));
-            if (write is not null)
-            {
-                return write.IsReadOnly;
-            }
-        }
-        return false;
-    }
+        => pi.GetCustomAttributes(false).Any(x => x.GetType().Name == nameof(ReadOnlyAttribute));
 
 }
