@@ -67,10 +67,10 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     public Task<int> UpdateAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.UpdateAsync<T>(entity, transaction, commandTimeout);
 
-    public Task<int> UpdateAsync(Key key, object set, int? commandTimeout = null)
+    public async Task<int> UpdateAsync(Key key, object set, int? commandTimeout = null)
     {
         using var connection = GetConnection();
-        return UpdateAsync(connection, key, set, null, commandTimeout);
+        return await UpdateAsync(connection, key, set, null, commandTimeout);
     }
 
     public Task<int> UpdateAsync(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
