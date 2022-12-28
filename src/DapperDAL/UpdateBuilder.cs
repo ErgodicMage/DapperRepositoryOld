@@ -53,7 +53,7 @@ public static class UpdateBuilder<T> where T : class
         bool first = true;
         foreach (var property in updates.GetType().GetProperties())
         {
-            var useProperty = BuilderCache<T>.ScaffoldProperties.FirstOrDefault(p => p.Name == property.Name);
+            var useProperty = BuilderCache<T>.Properties.FirstOrDefault(p => p.Name == property.Name);
             if (useProperty == null)
                 useProperty = property;
 
@@ -107,6 +107,9 @@ public static class UpdateBuilder<T> where T : class
 
     public static bool CanUpdate(PropertyInfo property)
     {
+        if (!property.PropertyType.IsSimpleType())
+            return false;
+
         var customAttributes = property.GetCustomAttributes(true);
         foreach (var attr in customAttributes)
         {
@@ -122,6 +125,8 @@ public static class UpdateBuilder<T> where T : class
             if (attr.GetType().Name == typeof(NotMappedAttribute).Name)
                 return false;
 
+            if (attr.GetType().Name == typeof(EditableAttribute).Name && !PropertiesHelper.IsEditable(property))
+                return false;
         }
 
         return true;
