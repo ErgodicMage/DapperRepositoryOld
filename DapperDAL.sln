@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindRepository", "Exam
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BF57D478-CC40-43F4-BA42-2D03BD31EF01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindTests", "tests\NorthwindTests\NorthwindTests.csproj", "{6CAB611B-6637-49B1-83F9-6F6052F44803}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NorthwindTests", "tests\NorthwindTests\NorthwindTests.csproj", "{6CAB611B-6637-49B1-83F9-6F6052F44803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperDALTests", "tests\DapperDALTests\DapperDALTests.csproj", "{10110879-1BF9-4966-B0B1-7E1925292B65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{6CAB611B-6637-49B1-83F9-6F6052F44803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CAB611B-6637-49B1-83F9-6F6052F44803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CAB611B-6637-49B1-83F9-6F6052F44803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10110879-1BF9-4966-B0B1-7E1925292B65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10110879-1BF9-4966-B0B1-7E1925292B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10110879-1BF9-4966-B0B1-7E1925292B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10110879-1BF9-4966-B0B1-7E1925292B65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{5FA6C56C-6ADB-4E44-8100-483626D19C79} = {0DA0A345-0931-4231-8ACA-EB195CF85348}
 		{48BAC004-D9E8-4FF1-BA9E-2C1F21C0FCD7} = {0DA0A345-0931-4231-8ACA-EB195CF85348}
 		{6CAB611B-6637-49B1-83F9-6F6052F44803} = {BF57D478-CC40-43F4-BA42-2D03BD31EF01}
+		{10110879-1BF9-4966-B0B1-7E1925292B65} = {BF57D478-CC40-43F4-BA42-2D03BD31EF01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EEF68715-8AE2-4FF8-832C-F101B80499EB}
