@@ -143,10 +143,11 @@ public static class SelectBuilder<T> where T : class
 
             if (!first)
                 sb.Append(',');
-            sb.Append(Resolvers.ResolveColumnName(property, alias));
+            string propertyName = Resolvers.ResolveColumnName(property, alias);
+            sb.Append(propertyName);
 
             string customColumnName = Resolvers.ResolveCustomColumnName(property);
-            if (!string.IsNullOrWhiteSpace(customColumnName))
+            if (!string.IsNullOrWhiteSpace(customColumnName) && customColumnName != propertyName)
                 sb.Append($" as {customColumnName}");
 
             first = false;
