@@ -1,4 +1,4 @@
-name: DapperDALBuild
+name: DapperRepositoryBuild
 
 on:
  workflow_dispatch
