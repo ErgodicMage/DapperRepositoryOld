@@ -50,16 +50,6 @@ public class RequiredAttribute : Attribute
 {
 }
 
-[AttributeUsage(AttributeTargets.Property)]
-public class EditableAttribute : Attribute
-{
-    public EditableAttribute(bool iseditable = true)
-    {
-        AllowEdit = iseditable;
-    }
-
-    public bool AllowEdit { get; init; }
-}
 
 [AttributeUsage(AttributeTargets.Property)]
 public class ReadOnlyAttribute : Attribute

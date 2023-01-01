@@ -124,9 +124,6 @@ public static class UpdateBuilder<T> where T : class
 
             if (attr.GetType().Name == typeof(NotMappedAttribute).Name)
                 return false;
-
-            if (attr.GetType().Name == typeof(EditableAttribute).Name && !PropertiesHelper.IsEditable(property))
-                return false;
         }
 
         return true;

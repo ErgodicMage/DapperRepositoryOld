@@ -60,10 +60,9 @@ public class ResolversTests
         Assert.Equal("[FatherId]", Resolvers.ResolveColumnName(properties[12]));
         Assert.Equal("[ChildrenId]", Resolvers.ResolveColumnName(properties[13]));
         Assert.Equal("[NotMapped]", Resolvers.ResolveColumnName(properties[14]));
-        Assert.Equal("[NotEditable]", Resolvers.ResolveColumnName(properties[15]));
-        Assert.Equal("[IgnoreSelect]", Resolvers.ResolveColumnName(properties[16]));
-        Assert.Equal("[IgnoreInsert]", Resolvers.ResolveColumnName(properties[17]));
-        Assert.Equal("[IgnoreUpdate]", Resolvers.ResolveColumnName(properties[18]));
+        Assert.Equal("[IgnoreSelect]", Resolvers.ResolveColumnName(properties[15]));
+        Assert.Equal("[IgnoreInsert]", Resolvers.ResolveColumnName(properties[16]));
+        Assert.Equal("[IgnoreUpdate]", Resolvers.ResolveColumnName(properties[17]));
     }
 
 }

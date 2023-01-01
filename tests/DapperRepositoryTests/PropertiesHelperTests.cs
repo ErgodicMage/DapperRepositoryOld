@@ -84,7 +84,7 @@ public class PropertiesHelperTests
         var person = new Person();
         PropertyInfo[] properties = PropertiesHelper.GetAllProperties<Person>(person);
         Assert.NotNull(properties);
-        Assert.Equal(19, properties.Length);
+        Assert.Equal(18, properties.Length);
 
         Assert.Equal("Id", properties[0].Name);
         Assert.Equal(typeof(int), properties[0].PropertyType);
@@ -131,17 +131,14 @@ public class PropertiesHelperTests
         Assert.Equal("NotMapped", properties[14].Name);
         Assert.Equal(typeof(string), properties[14].PropertyType);
 
-        Assert.Equal("NotEditable", properties[15].Name);
+        Assert.Equal("IgnoreSelect", properties[15].Name);
         Assert.Equal(typeof(string), properties[15].PropertyType);
 
-        Assert.Equal("IgnoreSelect", properties[16].Name);
+        Assert.Equal("IgnoreInsert", properties[16].Name);
         Assert.Equal(typeof(string), properties[16].PropertyType);
 
-        Assert.Equal("IgnoreInsert", properties[17].Name);
+        Assert.Equal("IgnoreUpdate", properties[17].Name);
         Assert.Equal(typeof(string), properties[17].PropertyType);
-
-        Assert.Equal("IgnoreUpdate", properties[18].Name);
-        Assert.Equal(typeof(string), properties[18].PropertyType);
 
     }
 

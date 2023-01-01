@@ -46,10 +46,6 @@ public class Person
     [NotMapped]
     public string? NotMapped { get; set; }
 
-    // [Editable(false)] is pretty much the same as [NotMapped]
-    [Editable(false)]
-    public string? NotEditable { get; } = "Not Editable";
-
     [IgnoreSelect]
     public string? IgnoreSelect { get; set; }
 
