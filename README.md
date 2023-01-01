@@ -71,7 +71,7 @@ public class Person
 }
 ```
 The PersonDAO does not change from the previous example. 
-DapperDAL automatcally generates the proper SQL to match the POCO.
+DapperRepository automatcally generates the proper SQL to match the POCO.
 
 
 #### ToDo
