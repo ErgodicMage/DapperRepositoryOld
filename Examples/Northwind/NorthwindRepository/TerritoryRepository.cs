@@ -6,7 +6,7 @@ public class TerritoryRepository : NorthwindGenericRepository<Territory, string>
     public TerritoryRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public TerritoryRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public TerritoryRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 

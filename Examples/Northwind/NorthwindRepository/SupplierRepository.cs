@@ -6,7 +6,7 @@ public class SupplierRepository : NorthwindGenericRepository<Supplier, int>, ISu
     public SupplierRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public SupplierRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public SupplierRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

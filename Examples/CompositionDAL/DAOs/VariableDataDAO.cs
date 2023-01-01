@@ -4,15 +4,15 @@ public class VariableDataDAO
 {
     #region Constructor
     private readonly string _connectionStringName;
-    public readonly DapperDALSettings _settings;
+    public readonly DapperRepositorySettings _settings;
 
     public VariableDataDAO(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
-        _settings = DapperDALSettings.DefaultSettings;
+        _settings = DapperRepositorySettings.DefaultSettings;
     }
 
-    public VariableDataDAO(DapperDALSettings settings, string connectionStringName)
+    public VariableDataDAO(DapperRepositorySettings settings, string connectionStringName)
     {
         _settings = settings;
         _connectionStringName = connectionStringName;

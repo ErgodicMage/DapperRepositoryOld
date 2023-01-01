@@ -6,7 +6,7 @@ public class EmployeeRepository : NorthwindGenericRepository<Employee, int>, IEm
     public EmployeeRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public EmployeeRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public EmployeeRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

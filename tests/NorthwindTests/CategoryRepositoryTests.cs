@@ -15,9 +15,9 @@ public class CategoryRepositoryTests
 
         _output = output;
 
-        DapperDALSettings settings = new DapperDALSettings();
+        DapperRepositorySettings settings = new DapperRepositorySettings();
         settings.Initialize(TestingUtilities.Configuration);
-        DapperDALSettings.DefaultSettings = settings;
+        DapperRepositorySettings.DefaultSettings = settings;
 
         _context = new NorthwindDbContext(settings, _connectionStringName);
     }
@@ -26,7 +26,7 @@ public class CategoryRepositoryTests
     [Trait("Category", TestCategories.IntegrationTest)]
     public void CategoryDapperDAL()
     {
-        string connectionString = DapperDALSettings.DefaultSettings.ConnectionString(_connectionStringName);
+        string connectionString = DapperRepositorySettings.DefaultSettings.ConnectionString(_connectionStringName);
         using var connection = new SqlConnection(connectionString);
         Category category = connection.GetId<Category>(1);
         Assert.NotNull(category);
@@ -36,7 +36,7 @@ public class CategoryRepositoryTests
     [Trait("Category", TestCategories.IntegrationTest)]
     public async Task CategoryDapperDALAsync()
     {
-        string connectionString = DapperDALSettings.DefaultSettings.ConnectionString(_connectionStringName);
+        string connectionString = DapperRepositorySettings.DefaultSettings.ConnectionString(_connectionStringName);
         using var connection = new SqlConnection(connectionString);
         Category category = await connection.GetIdAsync<Category>(1);
         Assert.NotNull(category);

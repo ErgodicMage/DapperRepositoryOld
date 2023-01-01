@@ -6,7 +6,7 @@ public class OrderRepository : NorthwindGenericRepository<Order, int>, IOrderRep
     public OrderRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public OrderRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public OrderRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

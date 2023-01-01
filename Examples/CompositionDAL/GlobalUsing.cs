@@ -5,6 +5,6 @@ global using System.Data.SqlClient;
 
 
 global using Dapper;
-global using DapperDAL;
+global using DapperRepository;
 
 global using CompositionDAL.Entities;

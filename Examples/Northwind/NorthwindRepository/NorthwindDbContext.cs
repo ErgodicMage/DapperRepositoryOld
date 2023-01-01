@@ -3,16 +3,16 @@
 public class NorthwindDbContext
 {
     #region Constructors
-    private readonly DapperDALSettings _settings;
+    private readonly DapperRepositorySettings _settings;
     private readonly string _connectionStringName;
 
     public NorthwindDbContext(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
-        _settings = DapperDALSettings.DefaultSettings;
+        _settings = DapperRepositorySettings.DefaultSettings;
     }
 
-    public NorthwindDbContext(DapperDALSettings settings, string connectionStringName)
+    public NorthwindDbContext(DapperRepositorySettings settings, string connectionStringName)
     {
         _settings = settings;
         _connectionStringName = connectionStringName;

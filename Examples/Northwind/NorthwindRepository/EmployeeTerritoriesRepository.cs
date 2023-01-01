@@ -6,7 +6,7 @@ public class EmployeeTerritoriesRepository : NorthwindGenericRepository<Employee
     public EmployeeTerritoriesRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public EmployeeTerritoriesRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public EmployeeTerritoriesRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

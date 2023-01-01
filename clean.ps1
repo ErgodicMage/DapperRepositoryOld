@@ -1,0 +1,2 @@
+cd C:\Development\EM\DapperRepository
+Get-ChildItem -include bin,obj,packages,'.vs',TestResults -Force -Recurse | foreach ($_) { remove-item $_.fullname -Force -Recurse -ErrorAction SilentlyContinue -Verbose}

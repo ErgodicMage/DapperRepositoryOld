@@ -6,7 +6,7 @@ public class ShipperRepository : NorthwindGenericRepository<Shipper, int>, IShip
     public ShipperRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public ShipperRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public ShipperRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

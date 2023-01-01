@@ -6,7 +6,7 @@ public class CustomerRepository : NorthwindGenericRepository<Customer, string>, 
     public CustomerRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public CustomerRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public CustomerRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

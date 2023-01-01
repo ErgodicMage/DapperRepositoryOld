@@ -6,7 +6,7 @@ public class ProductRepository : NorthwindGenericRepository<Product, int>, IProd
     public ProductRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public ProductRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public ProductRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }

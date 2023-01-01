@@ -6,7 +6,7 @@ public class CategoryRepository : NorthwindGenericRepository<Category, int>, ICa
     public CategoryRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public CategoryRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public CategoryRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 

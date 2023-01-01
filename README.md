@@ -1,6 +1,6 @@
-# DapperDAL
+# DapperRepository
 
-DapperDAL is an lightweight layer on top of Dapper (https://github.com/DapperLib/Dapper) that provides futher functionality to simplify the development of fast and roubust data access layers.
+DapperRepository is an lightweight layer on top of Dapper (https://github.com/DapperLib/Dapper) that provides futher functionality to simplify the development of fast and roubust data access layers.
 
 ### Usage
 #### Simple Person CRUD example:

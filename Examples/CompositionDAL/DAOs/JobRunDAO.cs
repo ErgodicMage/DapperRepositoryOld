@@ -4,15 +4,15 @@ public class JobRunDAO
 {
     #region Constructor
     private readonly string _connectionStringName;
-    public readonly DapperDALSettings _settings;
+    public readonly DapperRepositorySettings _settings;
 
     public JobRunDAO(string connectionStringName)
     {
         _connectionStringName = connectionStringName;
-        _settings = DapperDALSettings.DefaultSettings;
+        _settings = DapperRepositorySettings.DefaultSettings;
     }
 
-    public JobRunDAO(DapperDALSettings settings, string connectionStringName)
+    public JobRunDAO(DapperRepositorySettings settings, string connectionStringName)
     {
         _settings = settings;
         _connectionStringName = connectionStringName;

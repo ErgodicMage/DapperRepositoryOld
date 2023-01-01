@@ -6,7 +6,7 @@ public class RegionRepository : NorthwindGenericRepository<Region, int>, IRegion
     public RegionRepository(string connectionStringName) : base(connectionStringName)
     { }
 
-    public RegionRepository(DapperDALSettings settings, string connectionStringName) : base(settings, connectionStringName)
+    public RegionRepository(DapperRepositorySettings settings, string connectionStringName) : base(settings, connectionStringName)
     { }
     #endregion
 }
