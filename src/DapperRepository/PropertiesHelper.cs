@@ -10,14 +10,7 @@ internal static class PropertiesHelper
     }
 
     public static PropertyInfo[] GetScaffoldableProperties<T>() where T : class
-    {
-        IEnumerable<PropertyInfo> props = typeof(T).GetProperties();
-
-        props = props.Where(p => !p.GetCustomAttributes(true).Any(attr =>
-            attr.GetType().Name == nameof(EditableAttribute) && !IsEditable(p)));
-
-        return props.Where(p => p.PropertyType.IsSimpleType() || IsEditable(p)).ToArray();
-    }
+        =>  typeof(T).GetProperties().Where(p => p.PropertyType.IsSimpleType()).ToArray();
 
     public static PropertyInfo[] GetIdProperties(object entity) => GetIdProperties(entity.GetType());
 
@@ -62,20 +55,6 @@ internal static class PropertiesHelper
         dynamic? columnAttribute = property?.GetCustomAttributes().
             FirstOrDefault(attr => attr.GetType().Name == nameof(ColumnAttribute));
         return columnAttribute is not null && columnAttribute.Length > 0;
-    }
-
-    public static bool IsEditable(PropertyInfo pi)
-    {
-        var attributes = pi?.GetCustomAttributes(false);
-        if (attributes?.Length > 0)
-        {
-            dynamic? write = attributes?.FirstOrDefault(x => x.GetType().Name == nameof(EditableAttribute));
-            if (write is not null)
-            {
-                return write.AllowEdit;
-            }
-        }
-        return false;
     }
 
     public static bool IsReadOnly(PropertyInfo pi)

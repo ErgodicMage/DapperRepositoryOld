@@ -87,7 +87,6 @@ public class UpdateBuilderTests
             MotherId = 1,
             FatherId = 2,
             ChildrenId = new List<int>() { 3, 4 },
-            NotEditable = "Not",
             IgnoreUpdate = "Ignore"
         };
         string update = UpdateBuilder<Person>.BuildUpdateStatement(new { Id = 1 }, setNotIncluded);
