@@ -3,7 +3,7 @@
 DapperRepository is an lightweight layer on top of Dapper (https://github.com/DapperLib/Dapper) that provides futher functionality to simplify the development of fast and roubust data access layers.
 
 ### Usage
-#### Simple Person CRUD example:
+#### Simple Person Repository example:
 ```
 public class Person
 {
@@ -13,41 +13,26 @@ public class Person
     public string LastName {get; set;}
 }
 
-public class PersonDAO
+public class PersonRepository : BaseRepository<Person, string>
 {
+    private readonly DapperRepositorySettings _settings;
     private readonly string _connectionStringName;
 
-    public PersonDAO(string connectionStringName)
+    public PersonRepository(string connectionStringName)
     {
+        _settings = DapperRepositorySettings.DefaultSettings;
         _connectionStringName = connectionStringName;
     }
 
-    private string? ConnectionString => DapperDALSettings.ConnectionStrings(_connectionStringName);
-
-    public Person Get(int id)
+    public PersonRepository(DapperRepositorySettings settings, string connectionStringName)
     {
-        var connection = new SqlConnection(ConnectionString);
-        return connection.GetId<Person>(id);
+        _settings = settings;
+        _connectionStringName = connectionStringName;
     }
 
-    public int Insert(Person person)
-    {
-        using var connection = new SqlConnection(ConnectionString);
-        person.Id = connection.Insert<Person>(person);
-        return person.Id;
-    }
+    private string? ConnectionString => _settings.ConnectionString(_connectionStringName);
 
-    public int Update(Person person)
-    {
-        using var connection = new SqlConnection(ConnectionString);
-        return connection.Update<Person>(person);
-    }
-
-    public int Delete(int id)
-    {
-        using var connection = new SqlConnection(ConnectionString);
-        return connection.DeleteId<Person>(id);
-    }
+    protected override IDbConnection GetConnection() => new SqlConnection(ConnectionString);
 }
 ```
 This simple example can easily be done with Dapper if the Person POCO matches up with the SQL.
@@ -70,7 +55,7 @@ public class Person
     public string LastName {get; set;}
 }
 ```
-The PersonDAO does not change from the previous example. 
+The PersonRepository does not change from the previous example. 
 DapperRepository automatcally generates the proper SQL to match the POCO.
 
 
