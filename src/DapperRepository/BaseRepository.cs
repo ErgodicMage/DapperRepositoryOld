@@ -18,7 +18,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Key Insert(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.Insert<T, Key>(entity, transaction, commandTimeout);
+        => connection.Insert<T, Key>(entity, transaction, GetTimeout(commandTimeout));
 
     public async Task<Key> InsertAsync(T entity, int? commandTimeout = null)
     {
@@ -27,7 +27,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Task<Key> InsertAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.InsertAsync<T, Key>(entity, transaction, commandTimeout);
+        => connection.InsertAsync<T, Key>(entity, transaction, GetTimeout(commandTimeout));
     #endregion
 
     #region Update
@@ -38,7 +38,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public int Update(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.Update<T>(entity, transaction, commandTimeout);
+        => connection.Update<T>(entity, transaction, GetTimeout(commandTimeout));
 
     public int Update(Key key, object set, int? commandTimeout = null)
     {
@@ -47,7 +47,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public int Update(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.Update<T, Key>(key, set, transaction, commandTimeout);
+        => connection.Update<T, Key>(key, set, transaction, GetTimeout(commandTimeout));
 
     public int UpdateWhere(object where, object set, int? commandTimeout = null)
     {
@@ -56,7 +56,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public int UpdateWhere(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.UpdateWhere<T>(where, set, transaction, commandTimeout);
+        => connection.UpdateWhere<T>(where, set, transaction, GetTimeout(commandTimeout));
 
     public async Task<int> UpdateAsync(T entity, int? commandTimeout = null)
     {
@@ -65,7 +65,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Task<int> UpdateAsync(IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.UpdateAsync<T>(entity, transaction, commandTimeout);
+        => connection.UpdateAsync<T>(entity, transaction, GetTimeout(commandTimeout));
 
     public async Task<int> UpdateAsync(Key key, object set, int? commandTimeout = null)
     {
@@ -74,7 +74,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Task<int> UpdateAsync(IDbConnection connection, Key key, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.UpdateAsync<T, Key>(key, set, transaction, commandTimeout);
+        => connection.UpdateAsync<T, Key>(key, set, transaction, GetTimeout(commandTimeout));
 
     public async Task<int> UpdateWhereAsync(object where, object set, int? commandTimeout = null)
     {
@@ -83,7 +83,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Task<int> UpdateWhereAsync(IDbConnection connection, object where, object set, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.UpdateWhereAsync<T>(where, set, transaction, commandTimeout);
+        => connection.UpdateWhereAsync<T>(where, set, transaction, GetTimeout(commandTimeout));
     #endregion
 
     #region Delete
@@ -97,7 +97,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     {
         string sql = DeleteBuilder<T>.BuildDeleteIdStatement();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
-        return connection.Execute(sql, dynParameters, transaction, commandTimeout);
+        return connection.Execute(sql, dynParameters, transaction, GetTimeout(commandTimeout));
     }
 
     public int Delete(object whereConditions, int? commandTimeout = null)
@@ -107,7 +107,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public int Delete(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.DeleteWhere<T>(whereConditions, transaction, commandTimeout);
+        => connection.DeleteWhere<T>(whereConditions, transaction, GetTimeout(commandTimeout));
 
     public async Task<int> DeleteAsync(Key id, int? commandTimeout = null)
     {
@@ -119,7 +119,7 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     {
         string sql = DeleteBuilder<T>.BuildDeleteIdStatement();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
-        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        return connection.ExecuteAsync(sql, dynParameters, transaction, GetTimeout(commandTimeout));
     }
 
     public async Task<int> DeleteAsync(object whereConditions, int? commandTimeout = null)
@@ -129,6 +129,6 @@ public abstract class BaseRepository<T, Key> : BaseReadRepository<T, Key>, IRepo
     }
 
     public Task<int> DeleteAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.DeleteWhereAsync<T>(whereConditions, transaction, commandTimeout);
+        => connection.DeleteWhereAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout));
     #endregion
 }

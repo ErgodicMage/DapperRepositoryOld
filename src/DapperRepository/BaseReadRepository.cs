@@ -25,6 +25,12 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     protected string? GetConnectionString(string connectionStringName = "Default") => _settings.ConnectionString(connectionStringName);
     #endregion
 
+    #region Timeout Handling
+    public int? DefaultTimeout { get; set; }
+
+    protected int? GetTimeout(int? timeout) => (timeout is not null) ? timeout : DefaultTimeout;
+    #endregion
+
     #region Get
     public T? Get(Key key, int? commandTimeout = null)
     {
@@ -34,7 +40,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
 
     public T? Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetId<T>(key, transaction, commandTimeout) :
-                                 connection.GetIdLargeProperties<T>(key, transaction, commandTimeout);
+                                 connection.GetIdLargeProperties<T>(key, transaction, GetTimeout(commandTimeout));
 
     public T? Get(object whereConditions, int? commandTimeout = null)
     {
@@ -44,7 +50,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
 
     public T? Get(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.Get<T>(whereConditions, transaction, commandTimeout) :
-                                 connection.GetLargeProperties<T>(whereConditions, transaction, commandTimeout);
+                                 connection.GetLargeProperties<T>(whereConditions, transaction, GetTimeout(commandTimeout));
 
     public IEnumerable<T> GetWhere(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
@@ -54,7 +60,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
 
     public IEnumerable<T> GetWhere(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetWhere<T>(whereConditions, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereLargeProperties<T>(whereConditions, orderBy, transaction, commandTimeout);
+                                 connection.GetWhereLargeProperties<T>(whereConditions, orderBy, transaction, GetTimeout(commandTimeout));
 
     public IEnumerable<T> GetWhereStatement(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null)
     {
@@ -65,7 +71,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     public IEnumerable<T> GetWhereStatement(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null, IDbTransaction? transaction = null,
         int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetWhereStatement<T>(whereConditions, parameters, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereStatementLargeProperties<T>(whereConditions, parameters, orderBy, transaction, commandTimeout);
+                                 connection.GetWhereStatementLargeProperties<T>(whereConditions, parameters, orderBy, transaction, GetTimeout(commandTimeout));
 
 
     public int Count(object? whereConditions = null, int? commandTimeout = null)
@@ -74,7 +80,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
         return Count(connection, whereConditions, null, commandTimeout);
     }
     public int Count(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.Count<T>(whereConditions, transaction, commandTimeout);
+        => connection.Count<T>(whereConditions, transaction, GetTimeout(commandTimeout));
 
 
     public async Task<T?> GetAsync(Key key, int? commandTimeout = null)
@@ -85,7 +91,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
 
     public Task<T?> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetIdAsync<T>(key, transaction, commandTimeout) :
-                                 connection.GetIdLargePropertiesAsync<T>(key, transaction, commandTimeout);
+                                 connection.GetIdLargePropertiesAsync<T>(key, transaction, GetTimeout(commandTimeout));
 
     public async Task<T?> GetAsync(object whereConditions, int? commandTimeout = null)
     {
@@ -95,7 +101,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
 
     public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetAsync<T>(whereConditions, transaction, commandTimeout) :
-                                 connection.GetLargePropertiesAsync<T>(whereConditions, transaction, commandTimeout);
+                                 connection.GetLargePropertiesAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout));
 
     public async Task<IEnumerable<T>> GetWhereAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
     {
@@ -106,7 +112,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null,
         int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetWhereAsync<T>(whereConditions, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, commandTimeout);
+                                 connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, GetTimeout(commandTimeout));
 
     public async Task<IEnumerable<T>> GetWhereStatementAsync(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null)
     {
@@ -117,7 +123,7 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     public Task<IEnumerable<T>> GetWhereStatementAsync(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null,
         IDbTransaction? transaction = null, int? commandTimeout = null)
         => !_hasLargeProperties ? connection.GetWhereStatementAsync<T>(whereConditions, parameters, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereStatementLargePropertiesAsync<T>(whereConditions, parameters, orderBy, transaction, commandTimeout);
+                                 connection.GetWhereStatementLargePropertiesAsync<T>(whereConditions, parameters, orderBy, transaction, GetTimeout(commandTimeout));
 
     public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
     {
@@ -126,6 +132,6 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     }
 
     public Task<int> CountAsync(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.CountAsync<T>(whereConditions, transaction, commandTimeout);
+        => connection.CountAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout));
     #endregion
 }

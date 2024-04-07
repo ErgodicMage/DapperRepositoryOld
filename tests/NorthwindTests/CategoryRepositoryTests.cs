@@ -115,6 +115,7 @@ public class CategoryRepositoryTests
     public void GetAllCategtories()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
+        categoryRepository.DefaultTimeout = 60;
         var categories = categoryRepository.GetWhere();
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());
@@ -125,6 +126,7 @@ public class CategoryRepositoryTests
     public async Task GetAllCategtoriesAsync()
     {
         ICategoriesRepository categoryRepository = _context.CategoryRepository();
+        categoryRepository.DefaultTimeout = 60;
         var categories = await categoryRepository.GetWhereAsync();
         Assert.NotNull(categories);
         Assert.Equal(8, categories.Count());

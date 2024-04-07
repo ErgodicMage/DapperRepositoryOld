@@ -2,6 +2,7 @@
 
 public interface IReadRepository<T, Key> where T : class
 {
+    int? DefaultTimeout { get; set; }
     T? Get(Key key, int? commandTimeout = null);
     T? Get(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null);
     T? Get(object whereConditions, int? commandTimeout = null);
