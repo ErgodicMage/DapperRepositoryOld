@@ -1,4 +1,6 @@
-﻿namespace DapperRepository;
+﻿using System.Threading;
+
+namespace DapperRepository;
 
 public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where T : class
 {
@@ -81,57 +83,63 @@ public abstract class BaseReadRepository<T, Key> : IReadRepository<T, Key> where
     }
     public int Count(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
         => connection.Count<T>(whereConditions, transaction, GetTimeout(commandTimeout));
+    #endregion
 
-
-    public async Task<T?> GetAsync(Key key, int? commandTimeout = null)
+    #region Get Async
+    public async Task<T?> GetAsync(Key key, int? commandTimeout = null, CancellationToken cancellationToken = default)
     {
         using var connection = GetConnection();
-        return await GetAsync(connection, key, null, commandTimeout);
+        return await GetAsync(connection, key, null, commandTimeout, cancellationToken);
     }
 
-    public Task<T?> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => !_hasLargeProperties ? connection.GetIdAsync<T>(key, transaction, commandTimeout) :
-                                 connection.GetIdLargePropertiesAsync<T>(key, transaction, GetTimeout(commandTimeout));
+    public Task<T?> GetAsync(IDbConnection connection, Key key, IDbTransaction? transaction = null, int? commandTimeout = null, 
+        CancellationToken cancellationToken = default)
+        => !_hasLargeProperties ? connection.GetIdAsync<T>(key, transaction, commandTimeout, cancellationToken) :
+                                 connection.GetIdLargePropertiesAsync<T>(key, transaction, GetTimeout(commandTimeout), cancellationToken);
 
-    public async Task<T?> GetAsync(object whereConditions, int? commandTimeout = null)
+    public async Task<T?> GetAsync(object whereConditions, int? commandTimeout = null, CancellationToken cancellationToken = default)
     {
         using var connection = GetConnection();
-        return await GetAsync(connection, whereConditions, null, commandTimeout);
+        return await GetAsync(connection, whereConditions, null, commandTimeout, cancellationToken);
     }
 
-    public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => !_hasLargeProperties ? connection.GetAsync<T>(whereConditions, transaction, commandTimeout) :
-                                 connection.GetLargePropertiesAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout));
+    public Task<T?> GetAsync(IDbConnection connection, object whereConditions, IDbTransaction? transaction = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default)
+        => !_hasLargeProperties ? connection.GetAsync<T>(whereConditions, transaction, commandTimeout, cancellationToken) :
+                                 connection.GetLargePropertiesAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout), cancellationToken);
 
-    public async Task<IEnumerable<T>> GetWhereAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetWhereAsync(object? whereConditions = null, object? orderBy = null, int? commandTimeout = null,
+        CancellationToken cancellationToken = default)
     {
         using var connection = GetConnection();
-        return await GetWhereAsync(connection, whereConditions, orderBy, null, commandTimeout);
+        return await GetWhereAsync(connection, whereConditions, orderBy, null, commandTimeout, cancellationToken);
     }
 
-    public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, IDbTransaction? transaction = null,
-        int? commandTimeout = null)
-        => !_hasLargeProperties ? connection.GetWhereAsync<T>(whereConditions, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, GetTimeout(commandTimeout));
+    public Task<IEnumerable<T>> GetWhereAsync(IDbConnection connection, object? whereConditions = null, object? orderBy = null, 
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default)
+        => !_hasLargeProperties ? connection.GetWhereAsync<T>(whereConditions, orderBy, transaction, commandTimeout, cancellationToken) :
+                                 connection.GetWhereLargePropertiesAsync<T>(whereConditions, orderBy, transaction, GetTimeout(commandTimeout), cancellationToken);
 
-    public async Task<IEnumerable<T>> GetWhereStatementAsync(string whereConditions, object parameters, object? orderBy = null, int? commandTimeout = null)
+    public async Task<IEnumerable<T>> GetWhereStatementAsync(string whereConditions, object parameters, object? orderBy = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default)
     {
         using var connection = GetConnection();
-        return await GetWhereStatementAsync(connection, whereConditions, parameters, orderBy, null, commandTimeout);
+        return await GetWhereStatementAsync(connection, whereConditions, parameters, orderBy, null, commandTimeout, cancellationToken);
     }
 
     public Task<IEnumerable<T>> GetWhereStatementAsync(IDbConnection connection, string whereConditions, object parameters, object? orderBy = null,
-        IDbTransaction? transaction = null, int? commandTimeout = null)
-        => !_hasLargeProperties ? connection.GetWhereStatementAsync<T>(whereConditions, parameters, orderBy, transaction, commandTimeout) :
-                                 connection.GetWhereStatementLargePropertiesAsync<T>(whereConditions, parameters, orderBy, transaction, GetTimeout(commandTimeout));
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default)
+        => !_hasLargeProperties ? connection.GetWhereStatementAsync<T>(whereConditions, parameters, orderBy, transaction, commandTimeout, cancellationToken) :
+                                 connection.GetWhereStatementLargePropertiesAsync<T>(whereConditions, parameters, orderBy, transaction, GetTimeout(commandTimeout), cancellationToken);
 
-    public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null)
+    public async Task<int> CountAsync(object? whereConditions = null, int? commandTimeout = null, CancellationToken cancellationToken = default)
     {
         using var connection = GetConnection();
-        return await CountAsync(connection, whereConditions, null, commandTimeout);
+        return await CountAsync(connection, whereConditions, null, commandTimeout, cancellationToken);
     }
 
-    public Task<int> CountAsync(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, int? commandTimeout = null)
-        => connection.CountAsync<T>(whereConditions, transaction, GetTimeout(commandTimeout));
+    public Task<int> CountAsync(IDbConnection connection, object? whereConditions = null, IDbTransaction? transaction = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default)
+        => connection.CountAsync<T>(whereConditions!, transaction, GetTimeout(commandTimeout), cancellationToken);
     #endregion
 }

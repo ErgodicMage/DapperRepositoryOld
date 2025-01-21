@@ -1,4 +1,8 @@
-﻿namespace DapperRepository;
+﻿using System.Security.Cryptography;
+using System.Threading;
+using static Dapper.SqlMapper;
+
+namespace DapperRepository;
 
 public static partial class DapperExtensions
 {
@@ -14,11 +18,13 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
     public static Task<T?> GetIdAsync<T>(this IDbConnection connection, object id, 
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
-        return connection.QueryFirstOrDefaultAsync<T?>(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text, 
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstOrDefaultAsync<T?>(command);
     }
 
     /// <summary>
@@ -32,12 +38,14 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the id if found otherwise null</returns>
     public static Task<T?> GetIdLargePropertiesAsync<T>(this IDbConnection connection, object id,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSqlSelectIdString();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
         dynParameters = DynamicParametersHelper<T>.DynamicParametersFromGet(dynParameters);
-        return connection.QueryFirstOrDefaultAsync<T?>(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstOrDefaultAsync<T?>(command);
     }
 
     /// <summary>
@@ -50,10 +58,12 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
     public static Task<T?> GetAsync<T>(this IDbConnection connection, object whereConditions,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);
-        return connection.QueryFirstOrDefaultAsync<T?>(sql, whereConditions, transaction, commandTimeout);
+        CommandDefinition command = new(sql, null, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstOrDefaultAsync<T?>(command);
     }
 
     /// <summary>
@@ -66,12 +76,14 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>The entity for the where conditions if found otherwise null</returns>
     public static Task<T?> GetLargePropertiesAsync<T>(this IDbConnection connection, object whereConditions,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions);
         var parameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
         parameters = DynamicParametersHelper<T>.DynamicParametersFromGet(parameters);
-        return connection.QueryFirstOrDefaultAsync<T?>(sql, parameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, parameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstOrDefaultAsync<T?>(command);
     }
 
     /// <summary>
@@ -86,10 +98,13 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>An Enumerable of the entities found.</returns>
     public static Task<IEnumerable<T>> GetWhereAsync<T>(this IDbConnection connection, object? whereConditions = null, 
-        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null, 
+        CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
-        return connection.QueryAsync<T>(sql, whereConditions, transaction, commandTimeout);
+        CommandDefinition command = new(sql, null, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryAsync<T>(command);
     }
 
     /// <summary>
@@ -105,10 +120,13 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>An Enumerable of the entities found.</returns>
     public static Task<IEnumerable<T>> GetWhereStatementAsync<T>(this IDbConnection connection, string whereConditions, object? parameters = null,
-        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null,
+        CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
-        return connection.QueryAsync<T>(sql, parameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, null, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryAsync<T>(command);
     }
 
     /// <summary>
@@ -123,12 +141,15 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns>An Enumerable of the entities found.</returns>
     public static Task<IEnumerable<T>> GetWhereLargePropertiesAsync<T>(this IDbConnection connection, object? whereConditions = null,
-        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null,
+        CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
         var parameters = whereConditions is null ? new DynamicParameters() : DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
         parameters = DynamicParametersHelper<T>.DynamicParametersFromGet(parameters);
-        return connection.QueryAsync<T>(sql, parameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, parameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryAsync<T>(command);
     }
 
     /// <summary>
@@ -143,13 +164,16 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
-    public static Task<IEnumerable<T>> GetWhereStatementLargePropertiesAsync<T>(this IDbConnection connection, string whereConditions, object? parameters = null,
-        object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public static Task<IEnumerable<T>> GetWhereStatementLargePropertiesAsync<T>(this IDbConnection connection, string whereConditions, 
+        object? parameters = null, object? orderBy = null, IDbTransaction? transaction = null, int? commandTimeout = null, 
+        CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildSelectStatement(whereConditions, orderBy);
-        var dynParameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
+        var dynParameters = string.IsNullOrEmpty(whereConditions) ? new DynamicParameters() : DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
         dynParameters = DynamicParametersHelper<T>.DynamicParametersFromGet(dynParameters);
-        return connection.QueryAsync<T>(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryAsync<T>(command);
     }
 
     /// <summary>
@@ -160,10 +184,13 @@ public static partial class DapperExtensions
     /// <param name="transaction">The transaction if in one.</param>
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
-    public static Task<int> CountAsync<T>(this IDbConnection connection, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public static Task<int> CountAsync<T>(this IDbConnection connection, IDbTransaction? transaction = null, int? commandTimeout = null, 
+        CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildCountStatement();
-        return connection.QueryFirstAsync<int>(sql, null, transaction, commandTimeout);
+        CommandDefinition command = new(sql, null, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstAsync<int>(command);
     }
 
     /// <summary>
@@ -176,11 +203,13 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
     public static Task<int> CountAsync<T>(this IDbConnection connection, object whereConditions,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildCountStatement(whereConditions);
         var parameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
-        return connection.QueryFirstAsync<int>(sql, parameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, parameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstAsync<int>(command);
     }
 
     /// <summary>
@@ -194,80 +223,94 @@ public static partial class DapperExtensions
     /// <param name="commandTimeout">The timeout value, default none.</param>
     /// <returns></returns>
     public static Task<int> CountAsync<T>(IDbConnection connection, string whereConditions, object? parameters = null,
-        IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+        IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = SelectBuilder<T>.BuildCountStatement(whereConditions);
         var dynParameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(whereConditions);
-        return connection.QueryFirstAsync<int>(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text,
+            CommandFlags.Buffered, cancellationToken);
+        return connection.QueryFirstAsync<int>(command);
     }
     #endregion
 
     #region Insert function
-    public async static Task<Key> InsertAsync<T, Key>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public async static Task<Key> InsertAsync<T, Key>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = InsertBuilder<T>.BuildInsertStatement();
-        Key key = await connection.ExecuteScalarAsync<Key>(sql, entity, transaction, commandTimeout);
-        SetKey<T, Key>(entity, key);
-        return key;
+        CommandDefinition command = new(sql, entity, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        Key? key = await connection.ExecuteScalarAsync<Key>(command);
+        if (key is not null)
+            SetKey<T, Key>(entity, key);
+        return key!;
     }
 
-    public async static Task<string> InsertReturnStringAsync<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public async static Task<string> InsertReturnStringAsync<T>(this IDbConnection connection, T entity, IDbTransaction? transaction = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = InsertBuilder<T>.BuildInsertStatement();
-        string key = await connection.ExecuteScalarAsync<string>(sql, entity, transaction, commandTimeout);
+        CommandDefinition command = new(sql, entity, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        string? key = await connection.ExecuteScalarAsync<string>(command);
         if (!string.IsNullOrWhiteSpace(key)) SetKey<T, string>(entity, key);
-        return key;
+        return key!;
     }
     #endregion
 
     #region Update functions
     public static Task<int> UpdateAsync<T>(this IDbConnection connection, object parameters, IDbTransaction? transaction = null,
-        int? commandTimeout = null) where T : class
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(parameters);
         var dynParameters = UpdateBuilder<T>.GetUpdateParameters(parameters);
-        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
 
     public static Task<int> UpdateAsync<T, Key>(this IDbConnection connection, Key key, object set, IDbTransaction? transaction = null,
-    int? commandTimeout = null) where T : class
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateIdStatement(set);
-        var whereParameters = WhereBuilder<T>.GetIdParameters(key);
+        var whereParameters = WhereBuilder<T>.GetIdParameters(key!);
         var dynParameters = DynamicParametersHelper<T>.DynamicParametersUpdate(set, whereParameters);
-        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
 
     public static Task<int> UpdateWhereAsync<T>(this IDbConnection connection, object where, object set, IDbTransaction? transaction = null,
-        int? commandTimeout = null) where T : class
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateStatement(where, set);
         var whereParameters = DynamicParametersHelper<T>.DynamicParametersFromWhere(where);
         var dynParameters = DynamicParametersHelper<T>.DynamicParametersUpdate(set, whereParameters);
-        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
 
     public static Task<int> UpdateAsync<T>(this IDbConnection connection, T entity, object updates, IDbTransaction? transaction = null,
-        int? commandTimeout = null) where T : class
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = UpdateBuilder<T>.BuildUpdateEntityStatement();
-        return connection.ExecuteAsync(sql, entity, transaction, commandTimeout);
+        CommandDefinition command = new(sql, entity, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
     #endregion
 
     #region Delete functions
-    public static Task<int> DeleteIdAsync<T>(this IDbConnection connection, int id, IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    public static Task<int> DeleteIdAsync<T>(this IDbConnection connection, int id, IDbTransaction? transaction = null, 
+        int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = DeleteBuilder<T>.BuildDeleteIdStatement();
         var dynParameters = WhereBuilder<T>.GetIdParameters(id);
-        return connection.ExecuteAsync(sql, dynParameters, transaction, commandTimeout);
+        CommandDefinition command = new(sql, dynParameters, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
 
     public static Task<int> DeleteWhereAsync<T>(this IDbConnection connection, object whereConditions,
-    IDbTransaction? transaction = null, int? commandTimeout = null) where T : class
+    IDbTransaction? transaction = null, int? commandTimeout = null, CancellationToken cancellationToken = default) where T : class
     {
         string sql = DeleteBuilder<T>.BuildDeleteStatement(whereConditions);
-        return connection.ExecuteAsync(sql, whereConditions, transaction, commandTimeout);
+        CommandDefinition command = new(sql, whereConditions, transaction, commandTimeout, CommandType.Text, CommandFlags.None, cancellationToken);
+        return connection.ExecuteAsync(command);
     }
     #endregion
 }
